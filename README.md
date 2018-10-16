@@ -3,7 +3,11 @@ Elliptic-curve Diffie-Hellman key exchange between Arduino microcontroller and A
 
 #### Key exchange protocol
 
+<p align="center">
+  <img alt="Key exchange protocol" src="https://github.com/m-peko/ECDHoBLE/blob/master/resources/KeyExchangeProtocol.jpg" height="300px"/>
+</p>
 
+Interesting [link](http://www.ieeesmc.org/newsletters/back/2010_12/main_article3.html).
 
 #### Comparisons between BLE, WiFi and LoRa
 
