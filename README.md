@@ -67,7 +67,16 @@ Refer to this [article](https://www.digikey.com/eewiki/display/Wireless/A+Basic+
 
 ### Arduino
 
-For the purpose of this project, Arduino Uno is used along with Bluetooth module
+For the purpose of this project, Arduino Uno is used along with Bluetooth module HM-10.
+
+Wiring the HM-10 to the Arduino Uno board:
+
+| Arduino Uno | HM-10 |
+|:-----------:|:-----:|
+|      D2     |   TX  |
+|      D3     |   RX  |
+|     GND     |  GND  |
+|    3.3V     |  VCC  |
 
 #### Arduino crypto libraries
 
@@ -79,6 +88,4 @@ For the purpose of this project, Android application is built by using C# and Xa
 
 #### Android crypto libraries
 
- - [C# Cryptography Library](http://securitydriven.net/inferno/#DHM%20Key%20Exchange)
- 
- - [Java/C# Cryptography Library](https://www.bouncycastle.org/)
+ - [Example](https://github.com/joelwass/Android-BLE-Connect-Example)
