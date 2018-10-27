@@ -1,35 +1,60 @@
 #include <Arduino.h>
 #include <SoftwareSerial.h>
+#include <Curve25519.h>
 
-#define LED_BUILTIN 13
+#define DATA_RATE     9600
+#define LED_BUILTIN   13
+#define BLE_MODULE_RX 2
+#define BLE_MODULE_TX 3
 
-SoftwareSerial ble(2, 3); /* RX, TX */
+SoftwareSerial bleModule(BLE_MODULE_RX, BLE_MODULE_TX);
 
-void setup() {
+uint8_t publicECDHKey[32];
+uint8_t privateECDHKey[32];
+
+void setup()
+{
     /* initialize LED digital pin as output */
     pinMode(LED_BUILTIN, OUTPUT);
 
-    /* open serial port */
-    Serial.begin(9600);
+    /**
+     * begin serial port communication and
+     * set the data rate
+     */
+    Serial.begin(DATA_RATE);
 
-    /* begin bluetooth serial port communication */
-    ble.begin(9600);
+    /**
+     * begin BLE serial port communication and
+     * set the data rate
+     */
+    bleModule.begin(DATA_RATE);
+
+    while (!Serial);
+    Serial.println("Arduino Setup");
+
+    /* generate public and private ECDH key */
+    Curve25519::dh1(publicECDHKey, privateECDHKey);
 }
 
-void loop() {
+void loop()
+{
     /* turn the LED on (HIGH is the voltage level) */
     digitalWrite(LED_BUILTIN, HIGH);
-
-    /* wait for 1s */
-    delay(1000);
+    delay(100);
 
     /* turn the LED off (LOW is the voltage level) */
     digitalWrite(LED_BUILTIN, LOW);
+    delay(100);
 
-    /* wait for 1s */
-    delay(1000);
+    /* read from the BLE module and write to the Serial */
+    if (bleModule.available())
+    {
+        Serial.write(bleModule.read());
+    }
 
-    Serial.println("Sending Bluetooth Message...");
-    ble.write("Testing...");
-    delay(500);
+    /* read from the Serial and write to the BLE module */
+    if (Serial.available())
+    {
+        bleModule.write(Serial.read());
+    }
 }
