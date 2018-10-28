@@ -20,56 +20,62 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#include <Arduino.h>
-#include <SoftwareSerial.h>
+#include <ECDHKeyExchange.h>
+#include <Curve25519.h>
 
-#define DATA_RATE     9600
-#define LED_BUILTIN   13
-#define BLE_MODULE_RX 2
-#define BLE_MODULE_TX 3
+ECDHKeyExchange::ECDHKeyExchange()
+    : m_publicKey(),
+      m_privateKey()
+{}
 
-SoftwareSerial bleModule(BLE_MODULE_RX, BLE_MODULE_TX);
+ECDHKeyExchange::~ECDHKeyExchange()
+{}
 
-void setup()
+void
+ECDHKeyExchange::generateKeys()
 {
-    /* initialize LED digital pin as output */
-    pinMode(LED_BUILTIN, OUTPUT);
-
-    /**
-     * begin serial port communication and
-     * set the data rate
-     */
-    Serial.begin(DATA_RATE);
-
-    /**
-     * begin BLE serial port communication and
-     * set the data rate
-     */
-    bleModule.begin(DATA_RATE);
-
-    while (!Serial);
-    Serial.println("Arduino Setup");
+    Curve25519::dh1(m_publicKey, m_privateKey);
 }
 
-void loop()
+void
+ECDHKeyExchange::clearKeys()
 {
-    /* turn the LED on (HIGH is the voltage level) */
-    digitalWrite(LED_BUILTIN, HIGH);
-    delay(100);
+    memset(m_publicKey, 0, KEY_SIZE);
+    memset(m_privateKey, 0, KEY_SIZE);
+}
 
-    /* turn the LED off (LOW is the voltage level) */
-    digitalWrite(LED_BUILTIN, LOW);
-    delay(100);
+void
+ECDHKeyExchange::sendPublicKey(Stream& stream)
+{
+    stream.print("PU:");
+    stream.println(keyToStr(m_publicKey));
+}
 
-    /* read from the BLE module and write to the Serial */
-    if (bleModule.available())
+void
+ECDHKeyExchange::printPublicKey(Stream& stream)
+{
+    stream.print("Public key: ");
+    stream.println(keyToStr(m_publicKey));
+}
+
+void
+ECDHKeyExchange::printPrivateKey(Stream& stream)
+{
+    stream.print("Private key: ");
+    stream.println(keyToStr(m_privateKey));
+}
+
+char const *
+ECDHKeyExchange::keyToStr(uint8_t const *key)
+{
+    uint8_t offset = 0;
+    static char keyStr[2 * KEY_SIZE + 1];
+
+    for (size_t i = 0; i < KEY_SIZE; i++)
     {
-        Serial.write(bleModule.read());
+        offset += sprintf(keyStr + offset, "%02X", key[i]);
     }
+    sprintf(keyStr + offset, "%c", '\0');
 
-    /* read from the Serial and write to the BLE module */
-    if (Serial.available())
-    {
-        bleModule.write(Serial.read());
-    }
+    return keyStr;
 }

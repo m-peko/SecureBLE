@@ -20,56 +20,34 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#include <Arduino.h>
-#include <SoftwareSerial.h>
+#ifndef ECDHKeyExchange_H
+#define ECDHKeyExchange_H
 
-#define DATA_RATE     9600
-#define LED_BUILTIN   13
-#define BLE_MODULE_RX 2
-#define BLE_MODULE_TX 3
+#include <stdint.h>
+#include <stddef.h>
 
-SoftwareSerial bleModule(BLE_MODULE_RX, BLE_MODULE_TX);
+#include <Stream.h>
 
-void setup()
+class ECDHKeyExchange
 {
-    /* initialize LED digital pin as output */
-    pinMode(LED_BUILTIN, OUTPUT);
+public:
+    ECDHKeyExchange();
+    ~ECDHKeyExchange();
 
-    /**
-     * begin serial port communication and
-     * set the data rate
-     */
-    Serial.begin(DATA_RATE);
+    void generateKeys();
+    void clearKeys();
+    void sendPublicKey(Stream& stream);
 
-    /**
-     * begin BLE serial port communication and
-     * set the data rate
-     */
-    bleModule.begin(DATA_RATE);
+    void printPublicKey(Stream& stream);
+    void printPrivateKey(Stream& stream);
 
-    while (!Serial);
-    Serial.println("Arduino Setup");
-}
+private:
+    char const * keyToStr(uint8_t const *key);
 
-void loop()
-{
-    /* turn the LED on (HIGH is the voltage level) */
-    digitalWrite(LED_BUILTIN, HIGH);
-    delay(100);
+    static const size_t KEY_SIZE = 32;
 
-    /* turn the LED off (LOW is the voltage level) */
-    digitalWrite(LED_BUILTIN, LOW);
-    delay(100);
+    uint8_t m_publicKey[KEY_SIZE];
+    uint8_t m_privateKey[KEY_SIZE];
+};
 
-    /* read from the BLE module and write to the Serial */
-    if (bleModule.available())
-    {
-        Serial.write(bleModule.read());
-    }
-
-    /* read from the Serial and write to the BLE module */
-    if (Serial.available())
-    {
-        bleModule.write(Serial.read());
-    }
-}
+#endif /* ECDH_H */

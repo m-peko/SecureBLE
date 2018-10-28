@@ -20,56 +20,41 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#include <Arduino.h>
-#include <SoftwareSerial.h>
+#ifndef StateMachine_H
+#define StateMachine_H
 
-#define DATA_RATE     9600
-#define LED_BUILTIN   13
-#define BLE_MODULE_RX 2
-#define BLE_MODULE_TX 3
+#include <ECDHKeyExchange.h>
 
-SoftwareSerial bleModule(BLE_MODULE_RX, BLE_MODULE_TX);
-
-void setup()
+enum class State
 {
-    /* initialize LED digital pin as output */
-    pinMode(LED_BUILTIN, OUTPUT);
+    STATE_START,
+    STATE_KEYS_GENERATION,
+    STATE_SHARED_SECRET_GENERATION,
+    STATE_ENCRYPTED_CONNECTION
+};
 
-    /**
-     * begin serial port communication and
-     * set the data rate
-     */
-    Serial.begin(DATA_RATE);
-
-    /**
-     * begin BLE serial port communication and
-     * set the data rate
-     */
-    bleModule.begin(DATA_RATE);
-
-    while (!Serial);
-    Serial.println("Arduino Setup");
-}
-
-void loop()
+enum class Event
 {
-    /* turn the LED on (HIGH is the voltage level) */
-    digitalWrite(LED_BUILTIN, HIGH);
-    delay(100);
+    EVENT_CONNECT_REQ,
+    EVENT_PU_KEY_RECEIVED,
+    EVENT_SHARED_SECRET_SUCCESS,
+    EVENT_SHARED_SECRET_FAILURE,
+    EVENT_RESET
+};
 
-    /* turn the LED off (LOW is the voltage level) */
-    digitalWrite(LED_BUILTIN, LOW);
-    delay(100);
+class StateMachine
+{
+public:
+    StateMachine();
+    ~StateMachine();
 
-    /* read from the BLE module and write to the Serial */
-    if (bleModule.available())
-    {
-        Serial.write(bleModule.read());
-    }
+    void onReceive(Event event);
+    void switchState(State newState);
+    void onEntry();
 
-    /* read from the Serial and write to the BLE module */
-    if (Serial.available())
-    {
-        bleModule.write(Serial.read());
-    }
-}
+private:
+    State m_currentState;
+    ECDHKeyExchange keyExchange;
+};
+
+#endif /* StateMachine_H */
