@@ -65,6 +65,14 @@ Refer to this [article](https://www.digikey.com/eewiki/display/Wireless/A+Basic+
 - [BLE vs LoRa](https://www.mwrf.com/systems/lorable-puts-iot-everywhere-map)
 - [WiFi vs LoRa](https://medium.com/bytes-io/lora-vs-wifi-3-questions-d9c93137fca)
 
+### State Machine
+
+State Machines in general represent a set of complex rules and conditions. For the purpose of this project, State Machine is created in order to simplify execution of Elliptic-curve Diffie-Hellman key exchange protocol and also to simulate its states and transitions. The same State Machine is implemented on both, Arduino Uno board and Android device.
+
+<p align="center">
+  <img alt="State Machine" src="https://github.com/m-peko/ECDHoBLE/blob/master/docs/resources/StateMachine.jpg" height="300px"/>
+</p>
+
 ### Arduino
 
 For the purpose of this project, Arduino Uno is used along with Bluetooth module HM-10.
