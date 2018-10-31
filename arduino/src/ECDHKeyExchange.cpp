@@ -25,16 +25,40 @@
 
 ECDHKeyExchange::ECDHKeyExchange()
     : m_publicKey(),
-      m_privateKey()
+      m_privateKey(),
+      m_foreignPublicKey(),
+      m_sharedSecret()
 {}
 
 ECDHKeyExchange::~ECDHKeyExchange()
 {}
 
 void
-ECDHKeyExchange::generateKeys()
+ECDHKeyExchange::setForeignPublicKey(char const *key)
 {
-    Curve25519::dh1(m_publicKey, m_privateKey);
+    for (size_t i = 0; i < KEY_SIZE; i++)
+    {
+        sscanf(key, "%2hhx", &m_foreignPublicKey[i]);
+        key += 2;
+    }
+}
+
+char const *
+ECDHKeyExchange::getPublicKeyStr()
+{
+    return keyToStr(m_publicKey);
+}
+
+char const *
+ECDHKeyExchange::getPrivateKeyStr()
+{
+    return keyToStr(m_privateKey);
+}
+
+char const *
+ECDHKeyExchange::getForeignPublicKeyStr()
+{
+    return keyToStr(m_foreignPublicKey);
 }
 
 void
@@ -42,27 +66,28 @@ ECDHKeyExchange::clearKeys()
 {
     memset(m_publicKey, 0, KEY_SIZE);
     memset(m_privateKey, 0, KEY_SIZE);
+    memset(m_foreignPublicKey, 0, KEY_SIZE);
 }
 
 void
-ECDHKeyExchange::sendPublicKey(Stream& stream)
+ECDHKeyExchange::generateKeys()
 {
-    stream.print("PU:");
-    stream.println(keyToStr(m_publicKey));
+    Curve25519::dh1(m_publicKey, m_privateKey);
 }
 
-void
-ECDHKeyExchange::printPublicKey(Stream& stream)
+bool
+ECDHKeyExchange::generateSharedSecret()
 {
-    stream.print("Public key: ");
-    stream.println(keyToStr(m_publicKey));
-}
+    for (size_t i = 0; i < KEY_SIZE; i++)
+    {
+        m_sharedSecret[i] = m_foreignPublicKey[i];
+    }
 
-void
-ECDHKeyExchange::printPrivateKey(Stream& stream)
-{
-    stream.print("Private key: ");
-    stream.println(keyToStr(m_privateKey));
+    if (!Curve25519::dh2(m_sharedSecret, m_privateKey))
+    {
+        return false;
+    }
+    return true;
 }
 
 char const *

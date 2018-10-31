@@ -22,16 +22,21 @@
 
 #include <StateMachine.h>
 
-StateMachine::StateMachine()
-    : m_currentState(State::STATE_START)
+#include <Arduino.h>
+
+StateMachine::StateMachine(SoftwareSerial const& bleModule)
+    : m_currentState(State::STATE_START),
+      m_bleModule(bleModule)
 {}
 
 StateMachine::~StateMachine()
 {}
 
 void
-StateMachine::onReceive(Event event)
+StateMachine::onReceive(char const *messageType, char const *messageContent)
 {
+    Event event = strToEvent(messageType);
+
     switch (event)
     {
     case Event::EVENT_CONNECT_REQ:
@@ -43,6 +48,7 @@ StateMachine::onReceive(Event event)
     case Event::EVENT_PU_KEY_RECEIVED:
         if (State::STATE_KEYS_GENERATION == m_currentState)
         {
+            m_keyExchange.setForeignPublicKey(messageContent);
             switchState(State::STATE_SHARED_SECRET_GENERATION);
         }
         break;
@@ -67,6 +73,35 @@ StateMachine::onReceive(Event event)
     }
 }
 
+Event
+StateMachine::strToEvent(char const *str)
+{
+    if (!strcmp(str, "CONNECT"))
+    {
+        return Event::EVENT_CONNECT_REQ;
+    }
+    else if (!strcmp(str, "PU"))
+    {
+        return Event::EVENT_PU_KEY_RECEIVED;
+    }
+    else if (!strcmp(str, "SUCCESS"))
+    {
+        return Event::EVENT_SHARED_SECRET_SUCCESS;
+    }
+    else if (!strcmp(str, "FAILURE"))
+    {
+        return Event::EVENT_SHARED_SECRET_FAILURE;
+    }
+    else if (!strcmp(str, "RESET"))
+    {
+        return Event::EVENT_RESET;
+    }
+    else
+    {
+        return Event::EVENT_UNKNOWN;
+    }
+}
+
 void
 StateMachine::switchState(State newState)
 {
@@ -80,17 +115,27 @@ StateMachine::onEntry()
     switch (m_currentState)
     {
     case State::STATE_START:
-        keyExchange.clearKeys();
+        m_keyExchange.clearKeys();
         break;
     case State::STATE_KEYS_GENERATION:
-        keyExchange.generateKeys();
-        // send public key
+        m_keyExchange.generateKeys();
+
+        m_bleModule.print("$PU=");
+        m_bleModule.print(m_keyExchange.getPublicKeyStr());
+        m_bleModule.println(";");
         break;
     case State::STATE_SHARED_SECRET_GENERATION:
-        // generate shared secret
+        if (m_keyExchange.generateSharedSecret())
+        {
+            m_bleModule.println("$SUCCESS;");
+        }
+        else
+        {
+            m_bleModule.println("$FAILURE;");
+        }
         break;
     case State::STATE_ENCRYPTED_CONNECTION:
-        break;
+    case State::STATE_UNKNOWN:
     default:
         /* unknown state */
         break;

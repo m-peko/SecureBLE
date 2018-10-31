@@ -73,6 +73,17 @@ State Machines in general represent a set of complex rules and conditions. For t
   <img alt="State Machine" src="https://github.com/m-peko/ECDHoBLE/blob/master/docs/resources/StateMachine.jpg" height="300px"/>
 </p>
 
+### Messages
+
+All messages exchanged during both, key exchange protocol and encrypted communication, have the following template: `$<MESSAGE_TYPE>=<MESSAGE_CONTENT>;`. `MESSAGE_CONTENT` part of the message is optional.
+
+Supported message types:
+- **CONNECT** - initiates ECDH key exchange protocol
+- **PU** - carries ECDH public key from one entity to another
+- **SUCCESS** - indication for successful generation of a shared secret
+- **FAILURE** - indication for unsuccessful generation of a shared secret
+- **DATA** - carries data from one entity to another
+
 ### Arduino
 
 For the purpose of this project, Arduino Uno is used along with Bluetooth module HM-10.
