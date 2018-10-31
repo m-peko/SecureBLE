@@ -67,6 +67,7 @@ ECDHKeyExchange::clearKeys()
     memset(m_publicKey, 0, KEY_SIZE);
     memset(m_privateKey, 0, KEY_SIZE);
     memset(m_foreignPublicKey, 0, KEY_SIZE);
+    memset(m_sharedSecret, 0, KEY_SIZE);
 }
 
 void

@@ -31,7 +31,7 @@
 #define BLE_MODULE_TX   3
 
 SoftwareSerial bleModule(BLE_MODULE_RX, BLE_MODULE_TX);
-StateMachine stateMachine(bleModule);
+StateMachine *stateMachine;
 MessageParser parser;
 
 void setup()
@@ -50,6 +50,8 @@ void setup()
      * and set the data rate
      */
     bleModule.begin(DATA_RATE);
+
+    stateMachine = new StateMachine(bleModule);
 
     while (!Serial);
     Serial.println("Arduino Uno Board Started");
@@ -77,8 +79,8 @@ void loop()
         if (parser.isMessageEnded())
         {
             parser.run();
-            stateMachine.onReceive(parser.getMessageType(),
-                                   parser.getMessageContent());
+            stateMachine->onReceive(parser.getMessageType(),
+                                    parser.getMessageContent());
             parser.reset();
         }
     }

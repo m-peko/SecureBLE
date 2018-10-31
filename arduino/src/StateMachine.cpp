@@ -22,7 +22,12 @@
 
 #include <StateMachine.h>
 
-#include <Arduino.h>
+const char StateMachine::CONNECT_MESSAGE_TYPE[] = "CONNECT";
+const char StateMachine::PU_MESSAGE_TYPE[]      = "PU";
+const char StateMachine::SUCCESS_MESSAGE_TYPE[] = "SUCCESS";
+const char StateMachine::FAILURE_MESSAGE_TYPE[] = "FAILURE";
+const char StateMachine::DATA_MESSAGE_TYPE[]    = "DATA";
+const char StateMachine::RESET_MESSAGE_TYPE[]   = "RESET";
 
 StateMachine::StateMachine(SoftwareSerial const& bleModule)
     : m_currentState(State::STATE_START),
@@ -35,7 +40,7 @@ StateMachine::~StateMachine()
 void
 StateMachine::onReceive(char const *messageType, char const *messageContent)
 {
-    Event event = strToEvent(messageType);
+    Event event = messageTypeToEvent(messageType);
 
     switch (event)
     {
@@ -74,25 +79,25 @@ StateMachine::onReceive(char const *messageType, char const *messageContent)
 }
 
 Event
-StateMachine::strToEvent(char const *str)
+StateMachine::messageTypeToEvent(char const *messageType)
 {
-    if (!strcmp(str, "CONNECT"))
+    if (!strcmp(messageType, CONNECT_MESSAGE_TYPE))
     {
         return Event::EVENT_CONNECT_REQ;
     }
-    else if (!strcmp(str, "PU"))
+    else if (!strcmp(messageType, PU_MESSAGE_TYPE))
     {
         return Event::EVENT_PU_KEY_RECEIVED;
     }
-    else if (!strcmp(str, "SUCCESS"))
+    else if (!strcmp(messageType, SUCCESS_MESSAGE_TYPE))
     {
         return Event::EVENT_SHARED_SECRET_SUCCESS;
     }
-    else if (!strcmp(str, "FAILURE"))
+    else if (!strcmp(messageType, FAILURE_MESSAGE_TYPE))
     {
         return Event::EVENT_SHARED_SECRET_FAILURE;
     }
-    else if (!strcmp(str, "RESET"))
+    else if (!strcmp(messageType, RESET_MESSAGE_TYPE))
     {
         return Event::EVENT_RESET;
     }
