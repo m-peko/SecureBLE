@@ -22,13 +22,17 @@
 
 #include <Arduino.h>
 #include <SoftwareSerial.h>
+#include <StateMachine.h>
+#include <MessageParser.h>
 
-#define DATA_RATE     9600
-#define LED_BUILTIN   13
-#define BLE_MODULE_RX 2
-#define BLE_MODULE_TX 3
+#define DATA_RATE       9600
+#define LED_BUILTIN     13
+#define BLE_MODULE_RX   2
+#define BLE_MODULE_TX   3
 
 SoftwareSerial bleModule(BLE_MODULE_RX, BLE_MODULE_TX);
+StateMachine stateMachine(bleModule);
+MessageParser parser;
 
 void setup()
 {
@@ -36,19 +40,19 @@ void setup()
     pinMode(LED_BUILTIN, OUTPUT);
 
     /**
-     * begin serial port communication and
-     * set the data rate
+     * begin serial port communication
+     * and set the data rate
      */
     Serial.begin(DATA_RATE);
 
     /**
-     * begin BLE serial port communication and
-     * set the data rate
+     * begin BLE serial port communication
+     * and set the data rate
      */
     bleModule.begin(DATA_RATE);
 
     while (!Serial);
-    Serial.println("Arduino Setup");
+    Serial.println("Arduino Uno Board Started");
 }
 
 void loop()
@@ -61,15 +65,21 @@ void loop()
     digitalWrite(LED_BUILTIN, LOW);
     delay(100);
 
-    /* read from the BLE module and write to the Serial */
-    if (bleModule.available())
+    /**
+     * read data from the BLE module
+     * and pass it to the parser
+     */
+    while (bleModule.available())
     {
-        Serial.write(bleModule.read());
-    }
+        char character = bleModule.read();
+        parser.buildMessage(character);
 
-    /* read from the Serial and write to the BLE module */
-    if (Serial.available())
-    {
-        bleModule.write(Serial.read());
+        if (parser.isMessageEnded())
+        {
+            parser.run();
+            stateMachine.onReceive(parser.getMessageType(),
+                                   parser.getMessageContent());
+            parser.reset();
+        }
     }
 }

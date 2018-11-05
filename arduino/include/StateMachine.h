@@ -23,10 +23,12 @@
 #ifndef StateMachine_H
 #define StateMachine_H
 
+#include <SoftwareSerial.h>
 #include <ECDHKeyExchange.h>
 
 enum class State
 {
+    STATE_UNKNOWN,
     STATE_START,
     STATE_KEYS_GENERATION,
     STATE_SHARED_SECRET_GENERATION,
@@ -35,6 +37,7 @@ enum class State
 
 enum class Event
 {
+    EVENT_UNKNOWN,
     EVENT_CONNECT_REQ,
     EVENT_PU_KEY_RECEIVED,
     EVENT_SHARED_SECRET_SUCCESS,
@@ -45,16 +48,19 @@ enum class Event
 class StateMachine
 {
 public:
-    StateMachine();
+    StateMachine(SoftwareSerial const& bleModule);
     ~StateMachine();
 
-    void onReceive(Event event);
+    void onReceive(char const *messageType, char const *messageContent);
+
+private:
+    Event strToEvent(char const *str);
     void switchState(State newState);
     void onEntry();
 
-private:
     State m_currentState;
-    ECDHKeyExchange keyExchange;
+    SoftwareSerial m_bleModule;
+    ECDHKeyExchange m_keyExchange;
 };
 
 #endif /* StateMachine_H */

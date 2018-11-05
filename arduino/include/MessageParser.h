@@ -20,39 +20,44 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef ECDHKeyExchange_H
-#define ECDHKeyExchange_H
+#ifndef MessageParser_H
+#define MessageParser_H
 
-#include <stdint.h>
-#include <stddef.h>
+#include <WString.h>
 
-#include <Stream.h>
-
-class ECDHKeyExchange
+class MessageParser
 {
 public:
-    ECDHKeyExchange();
-    ~ECDHKeyExchange();
+    MessageParser();
+    ~MessageParser();
 
-    void setForeignPublicKey(char const *key);
+    char const * getMessageType() const;
+    char const * getMessageContent() const;
 
-    char const * getPublicKeyStr();
-    char const * getPrivateKeyStr();
-    char const * getForeignPublicKeyStr();
-
-    void clearKeys();
-    void generateKeys();
-    bool generateSharedSecret();
+    void buildMessage(char readCharacter);
+    bool isMessageEnded();
+    void reset();
+    void run();
 
 private:
-    char const * keyToStr(uint8_t const *key);
+    void parseMessageType();
+    void parseMessageContent();
 
-    static const size_t KEY_SIZE = 32;
+    static const char MESSAGE_START = '$';
+    static const char MESSAGE_END = ';';
+    static const char CONTENT_DELIMITER = '=';
 
-    uint8_t m_publicKey[KEY_SIZE];
-    uint8_t m_privateKey[KEY_SIZE];
-    uint8_t m_foreignPublicKey[KEY_SIZE];
-    uint8_t m_sharedSecret[KEY_SIZE];
+    static const char CARRIAGE_RETURN = '\r';
+    static const char LINE_FEED = '\n';
+
+    static const size_t MAX_TYPE_SIZE = 8;
+    static const size_t MAX_CONTENT_SIZE = 64; /* TODO(m-peko): Support unlimited content size */
+
+    String m_receivedMessage;
+    bool m_messageStarted;
+    bool m_messageEnded;
+    char m_messageType[MAX_TYPE_SIZE];
+    char m_messageContent[MAX_CONTENT_SIZE];
 };
 
-#endif /* ECDHKeyExchange_H */
+#endif /* MessageParser_H */
