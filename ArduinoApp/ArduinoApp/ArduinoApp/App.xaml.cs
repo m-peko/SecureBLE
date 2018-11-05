@@ -1,4 +1,4 @@
-﻿using System;
+﻿using ArduinoApp.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -11,7 +11,8 @@ namespace ArduinoApp
         {
             InitializeComponent();
 
-            MainPage = new MainPage();
+            MainPage = new NavigationPage(new MainPageView());
+
         }
 
         protected override void OnStart()

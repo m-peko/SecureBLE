@@ -1,14 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="ArduinoApp.MainPage">
+             x:Class="ArduinoApp.Views.MainPageView">
 
   <StackLayout>
-
-    <Button Text="Connect To Arduino"
+    <Button Text="Search Arduino devices"
            HorizontalOptions="Center"
            VerticalOptions="CenterAndExpand"
-           Clicked="ConnectToArduino_Clicked"/>
-
+           Command="{Binding ScanArduinoDevicesCommand}"/>
   </StackLayout>
 </ContentPage>
