@@ -83,10 +83,7 @@ Supported message types:
 - **SUCCESS** - indication for successful generation of a shared secret
 - **FAILURE** - indication for unsuccessful generation of a shared secret
 - **DATA** - carries data from one entity to another
-<<<<<<< HEAD
-=======
 - **RESET** - resets ECDH key exchange protocol
->>>>>>> Add MessageParser and refactor StateMachine
 
 ### Arduino
 
