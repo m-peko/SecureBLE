@@ -30,6 +30,15 @@ namespace ArduinoApp.ViewModels
             set { _selectedDevice = value; RaisePropertyChanged(); ConnectToDevice();}
         }
 
+        private IList<IService> _services;
+
+        public IList<IService> Services
+        {
+            get { return _services; }
+            set { _services = value; RaisePropertyChanged();}
+        }
+
+
         public DevicesListViewModel()
         {
             Initialize();
@@ -38,6 +47,7 @@ namespace ArduinoApp.ViewModels
         public async void Initialize()
         {
             SelectedDevice = null;
+            Services = null;
 
             await ScanDevices();
         }
@@ -60,6 +70,7 @@ namespace ArduinoApp.ViewModels
             try
             {
                 await _adapter.ConnectToDeviceAsync(SelectedDevice);
+                Snackbar.Make(contentView, "Succesfully connected to device!", Snackbar.LengthLong).Show();
             }
             catch (DeviceConnectionException e)
             {
@@ -69,6 +80,8 @@ namespace ArduinoApp.ViewModels
             {
                 Snackbar.Make(contentView, "Something went wrong!", Snackbar.LengthLong).Show();
             }
+
+            Services = await SelectedDevice.GetServicesAsync();
         }
     }
 }

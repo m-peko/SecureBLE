@@ -17,5 +17,17 @@
         </DataTemplate>
       </ListView.ItemTemplate>
     </ListView>
+
+    <Label Text="Device services"
+           HorizontalOptions="Center"
+           VerticalOptions="StartAndExpand"></Label>
+    <ListView
+      ItemsSource="{Binding Services}">
+      <ListView.ItemTemplate>
+        <DataTemplate>
+          <TextCell Text="{Binding Name}"></TextCell>
+        </DataTemplate>
+      </ListView.ItemTemplate>
+    </ListView>
   </StackLayout>
 </ContentPage>
