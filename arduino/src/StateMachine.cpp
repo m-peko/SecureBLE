@@ -26,7 +26,6 @@ const char StateMachine::CONNECT_MESSAGE_TYPE[] = "CONNECT";
 const char StateMachine::PU_MESSAGE_TYPE[]      = "PU";
 const char StateMachine::SUCCESS_MESSAGE_TYPE[] = "SUCCESS";
 const char StateMachine::FAILURE_MESSAGE_TYPE[] = "FAILURE";
-const char StateMachine::DATA_MESSAGE_TYPE[]    = "DATA";
 const char StateMachine::RESET_MESSAGE_TYPE[]   = "RESET";
 
 StateMachine::StateMachine(SoftwareSerial const& bleModule)
@@ -117,6 +116,8 @@ StateMachine::switchState(State newState)
 void
 StateMachine::onEntry()
 {
+    m_bleModule.println("onEntry");
+
     switch (m_currentState)
     {
     case State::STATE_START:
@@ -140,6 +141,7 @@ StateMachine::onEntry()
         }
         break;
     case State::STATE_ENCRYPTED_CONNECTION:
+        /**/
     case State::STATE_UNKNOWN:
     default:
         /* unknown state */

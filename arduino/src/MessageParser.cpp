@@ -44,7 +44,7 @@ MessageParser::getMessageContent() const
 }
 
 void
-MessageParser::buildMessage(char character)
+MessageParser::buildMessage(char const character)
 {
     if (MESSAGE_START == character)
     {

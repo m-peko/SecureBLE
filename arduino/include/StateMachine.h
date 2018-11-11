@@ -64,7 +64,6 @@ private:
     static const char PU_MESSAGE_TYPE[];
     static const char SUCCESS_MESSAGE_TYPE[];
     static const char FAILURE_MESSAGE_TYPE[];
-    static const char DATA_MESSAGE_TYPE[];
     static const char RESET_MESSAGE_TYPE[];
 
     State m_currentState;

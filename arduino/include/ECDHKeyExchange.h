@@ -47,7 +47,7 @@ public:
 private:
     char const * keyToStr(uint8_t const *key);
 
-    static const size_t KEY_SIZE = 32;
+    static constexpr size_t KEY_SIZE = 32;
 
     uint8_t m_publicKey[KEY_SIZE];
     uint8_t m_privateKey[KEY_SIZE];

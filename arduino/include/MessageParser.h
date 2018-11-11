@@ -34,7 +34,7 @@ public:
     char const * getMessageType() const;
     char const * getMessageContent() const;
 
-    void buildMessage(char readCharacter);
+    void buildMessage(char const readCharacter);
     bool isMessageEnded();
     void reset();
     void run();
@@ -43,15 +43,15 @@ private:
     void parseMessageType();
     void parseMessageContent();
 
-    static const char MESSAGE_START = '$';
-    static const char MESSAGE_END = ';';
-    static const char CONTENT_DELIMITER = '=';
+    static constexpr char MESSAGE_START = '$';
+    static constexpr char MESSAGE_END = ';';
+    static constexpr char CONTENT_DELIMITER = '=';
 
-    static const char CARRIAGE_RETURN = '\r';
-    static const char LINE_FEED = '\n';
+    static constexpr char CARRIAGE_RETURN = '\r';
+    static constexpr char LINE_FEED = '\n';
 
-    static const size_t MAX_TYPE_SIZE = 8;
-    static const size_t MAX_CONTENT_SIZE = 64; /* TODO(m-peko): Support unlimited content size */
+    static constexpr size_t MAX_TYPE_SIZE = 8;
+    static constexpr size_t MAX_CONTENT_SIZE = 64; /* TODO(m-peko): Support unlimited content size */
 
     String m_receivedMessage;
     bool m_messageStarted;
