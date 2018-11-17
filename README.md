@@ -1,4 +1,4 @@
-# <p align="center">ECDHoBLE</p>
+# <p align="center">SecureBLE</p>
 <p align="center">Elliptic-curve Diffie-Hellman key exchange between Arduino microcontroller and Android application over BLE.</p>
 
 ### Key exchange protocol
