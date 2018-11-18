@@ -1,7 +1,10 @@
-﻿using Xamarin.Forms;
+﻿using Autofac;
+using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using Plugin.BLE;
 using Plugin.BLE.Abstractions.Contracts;
+using SecureBLE.Startup;
+using SecureBLE.Views;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace SecureBLE
@@ -14,9 +17,12 @@ namespace SecureBLE
 		{
 			InitializeComponent();
 
-			MainPage = new MainPage();
+		    var bootstrapper = new Bootstrapper();
+		    var container = bootstrapper.Bootstrap();
 
-			BLEAdapter = CrossBluetoothLE.Current.Adapter;
+		    MainPage = new NavigationPage(container.Resolve<MainView>());
+
+            BLEAdapter = CrossBluetoothLE.Current.Adapter;
 		}
 
 		protected override void OnStart()

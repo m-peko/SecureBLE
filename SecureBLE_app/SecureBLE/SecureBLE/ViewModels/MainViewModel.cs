@@ -1,46 +1,46 @@
 ﻿using System.Threading.Tasks;
 using System.Windows.Input;
+using Plugin.BLE;
 using Prism.Commands;
-using Prism.Common;
 using Prism.Services;
+using SecureBLE.Services.Interfaces;
 
 namespace SecureBLE.ViewModels
 {
-    class MainViewModel : BaseViewModel
+    public class MainViewModel : BaseViewModel
     {
-		private readonly IPageDialogService _PageDialogService;
-		public ICommand ScanDevicesCommand { get; set; }
+		private readonly IPageDialogService _pageDialogService;
+        public ICommand ScanDevicesCommand { get; set; }
 
-		public MainViewModel()
+		public MainViewModel(IPageDialogService pageDialogService)
 		{
-			_PageDialogService = new PageDialogService(new ApplicationProvider());
-			ScanDevicesCommand = new DelegateCommand(async () => await ScanDevices());
+			_pageDialogService = pageDialogService;
+
+            ScanDevicesCommand = new DelegateCommand(async () => await ScanDevices());
 		}
 
 		public async Task ScanDevices()
 		{
-			//TODO: replace Context with local context
-			var contentView = (Forms.Context as Activity)?.FindViewById(Android.Resource.Id.Content);
+            var ble = CrossBluetoothLE.Current;
+            var notificationService = new DependencyService().Get<INotificationService>();
 
-			if (bluetoothAdapter == null)
-			{
-				Snackbar.Make(contentView, "Device doesn't support Bluetooth.", Snackbar.LengthLong).Show();
-				return;
-			}
+            if (!ble.IsAvailable)
+            {
+                notificationService.Snackbar("Device doesn't support Bluetooth.");
+                return;
+            }
 
-			if (!App.BLEAdapter.IsEnabled)
-			{
-				var answer = await _PageDialogService.DisplayAlertAsync("Alert", "Do you want to enable Bluetooth?", "Yes", "No");
-				if (!answer)
-				{
-					return;
-				}
+            if (!ble.IsOn)
+            {
+                await _pageDialogService.DisplayAlertAsync("Alert", "Please turn on Bluetooth!", "OK");
 
-				bluetoothAdapter.Enable();
-				Snackbar.Make(contentView, "Bluetooth is enabled.", Snackbar.LengthLong).Show();
-			}
+                ble.StateChanged += (s, e) =>
+                {
+                    notificationService.Snackbar("Bluetooth is enabled.");
+                };
+            }
 
-			//await Application.Current.MainPage.Navigation.PushAsync(new DevicesListView());
-		}
+            //await Application.Current.MainPage.Navigation.PushAsync(new DevicesListView());
+        }
 	}
 }

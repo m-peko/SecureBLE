@@ -7,10 +7,10 @@ namespace SecureBLE.Views
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class MainView : ContentPage
 	{
-		public MainView()
+		public MainView(MainViewModel mainViewModel)
 		{
 			InitializeComponent();
-			BindingContext = new MainViewModel();
+			BindingContext = mainViewModel;
 		}
 	}
 }
