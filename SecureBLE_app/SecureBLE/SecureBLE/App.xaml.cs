@@ -1,31 +1,31 @@
 ﻿using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using Plugin.BLE;
+using Plugin.BLE.Abstractions.Contracts;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace SecureBLE
 {
 	public partial class App : Application
 	{
+		public static IAdapter BLEAdapter { get; set; }
+
 		public App()
 		{
 			InitializeComponent();
 
 			MainPage = new MainPage();
+
+			BLEAdapter = CrossBluetoothLE.Current.Adapter;
 		}
 
 		protected override void OnStart()
-		{
-			// Handle when your app starts
-		}
+		{}
 
 		protected override void OnSleep()
-		{
-			// Handle when your app sleeps
-		}
+		{}
 
 		protected override void OnResume()
-		{
-			// Handle when your app resumes
-		}
+		{}
 	}
 }

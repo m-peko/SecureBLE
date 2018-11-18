@@ -1,8 +1,8 @@
 ﻿using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using SecureBLE.Droid.ViewModels;
+using SecureBLE.ViewModels;
 
-namespace SecureBLE.Droid.Views
+namespace SecureBLE.Views
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class MainView : ContentPage
