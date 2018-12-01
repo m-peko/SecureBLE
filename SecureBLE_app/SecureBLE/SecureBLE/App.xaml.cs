@@ -11,8 +11,6 @@ namespace SecureBLE
 {
 	public partial class App : Application
 	{
-		public static IAdapter BLEAdapter { get; set; }
-
 		public App()
 		{
 			InitializeComponent();
@@ -21,8 +19,6 @@ namespace SecureBLE
 		    var container = bootstrapper.Bootstrap();
 
 		    MainPage = new NavigationPage(container.Resolve<MainView>());
-
-            BLEAdapter = CrossBluetoothLE.Current.Adapter;
 		}
 
 		protected override void OnStart()

@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using System.Windows.Input;
+using Autofac;
 using Plugin.BLE;
 using Prism.Commands;
 using Prism.Services;
@@ -40,7 +41,9 @@ namespace SecureBLE.ViewModels
                 };
             }
 
-            //await Application.Current.MainPage.Navigation.PushAsync(new DevicesListView());
+			var bootstrapper = new SecureBLE.Startup.Bootstrapper();
+			var container = bootstrapper.Bootstrap();
+			await Xamarin.Forms.Application.Current.MainPage.Navigation.PushAsync(container.Resolve<SecureBLE.Views.DevicesView>());
         }
 	}
 }

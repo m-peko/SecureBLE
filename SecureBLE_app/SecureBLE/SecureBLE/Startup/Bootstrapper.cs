@@ -12,14 +12,15 @@ namespace SecureBLE.Startup
         {
             ContainerBuilder builder = new ContainerBuilder();
 
-
             builder.RegisterType<MainView>().AsSelf();
-
             builder.RegisterType<MainViewModel>().AsSelf();
 
-            builder.RegisterType<ApplicationProvider>().As<IApplicationProvider>();
+			builder.RegisterType<DevicesView>().AsSelf();
+			builder.RegisterType<DevicesViewModel>().AsSelf();
 
-            builder.RegisterType<PageDialogService>().As<IPageDialogService>();
+			builder.RegisterType<ApplicationProvider>().As<IApplicationProvider>();
+
+			builder.RegisterType<PageDialogService>().As<IPageDialogService>();
 
             return builder.Build();
         }
