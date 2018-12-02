@@ -10,6 +10,7 @@
                    VerticalOptions="StartAndExpand"/>
 
 			<ListView ItemsSource="{ Binding DiscoveredDevices }"
+					  ItemSelected="{ Binding SelectDeviceCommand }"
 					  SelectedItem="{ Binding SelectedDevice }">
 				<ListView.ItemTemplate>
 					<DataTemplate>

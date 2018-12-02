@@ -1,6 +1,9 @@
-﻿using Android.App;
+﻿using Android;
+using Android.App;
 using Android.Content.PM;
 using Android.OS;
+using Android.Support.V4.App;
+using Android.Support.V4.Content;
 
 namespace SecureBLE.Droid
 {
@@ -16,5 +19,24 @@ namespace SecureBLE.Droid
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             LoadApplication(new App());
         }
-    }
+
+		protected override void OnStart()
+		{
+			base.OnStart();
+			RequestPermission(Manifest.Permission.AccessFineLocation);
+			RequestPermission(Manifest.Permission.AccessCoarseLocation);
+		}
+
+		private void RequestPermission(string permission)
+		{
+			if (ContextCompat.CheckSelfPermission(this, permission) != Permission.Granted)
+			{
+				ActivityCompat.RequestPermissions(this, new string[] { permission }, 0);
+			}
+			else
+			{
+				System.Diagnostics.Debug.WriteLine($"{ permission } already granted.");
+			}
+		}
+	}
 }

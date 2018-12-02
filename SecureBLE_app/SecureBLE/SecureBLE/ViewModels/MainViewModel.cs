@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using System.Windows.Input;
+using Xamarin.Forms;
 using Autofac;
 using Plugin.BLE;
 using Prism.Commands;
@@ -16,18 +17,17 @@ namespace SecureBLE.ViewModels
 		public MainViewModel(IPageDialogService pageDialogService)
 		{
 			_pageDialogService = pageDialogService;
-
             ScanDevicesCommand = new DelegateCommand(async () => await ScanDevices());
 		}
 
-		public async Task ScanDevices()
+		private async Task ScanDevices()
 		{
             var ble = CrossBluetoothLE.Current;
-            var notificationService = new DependencyService().Get<INotificationService>();
+            var notificationService = new Prism.Services.DependencyService().Get<INotificationService>();
 
             if (!ble.IsAvailable)
             {
-                notificationService.Snackbar("Device doesn't support Bluetooth.");
+                notificationService.Snackbar("Device does not support Bluetooth.");
                 return;
             }
 
@@ -41,9 +41,9 @@ namespace SecureBLE.ViewModels
                 };
             }
 
-			var bootstrapper = new SecureBLE.Startup.Bootstrapper();
+			var bootstrapper = new Startup.Bootstrapper();
 			var container = bootstrapper.Bootstrap();
-			await Xamarin.Forms.Application.Current.MainPage.Navigation.PushAsync(container.Resolve<SecureBLE.Views.DevicesView>());
+			await Application.Current.MainPage.Navigation.PushAsync(container.Resolve<Views.DevicesView>());
         }
 	}
 }
