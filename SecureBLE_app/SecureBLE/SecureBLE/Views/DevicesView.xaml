@@ -9,13 +9,13 @@
 				   HorizontalOptions="Center"
                    VerticalOptions="StartAndExpand"/>
 
-			<ListView ItemsSource="{ Binding DiscoveredDevices }"
-					  ItemSelected="{ Binding SelectDeviceCommand }"
-					  SelectedItem="{ Binding SelectedDevice }">
-				<ListView.ItemTemplate>
+      <ListView ItemsSource="{ Binding DiscoveredDevices }"
+					      SelectedItem="{ Binding SelectedDevice }">
+        <ListView.ItemTemplate>
 					<DataTemplate>
-						<TextCell Text="{ Binding Name }"
-								  Detail="{ Binding State }"/>
+            <TextCell Text="{ Binding Name }"
+								  Detail="{ Binding State }">
+            </TextCell>
 					</DataTemplate>
 				</ListView.ItemTemplate>
 			</ListView>
@@ -24,8 +24,22 @@
 				   HorizontalOptions="Center"
 				   VerticalOptions="StartAndExpand"/>
 
-			<ListView ItemsSource="{ Binding Services }">
+			<ListView ItemsSource="{ Binding Services }"
+			          SelectedItem="{ Binding SelectedService }">
 				<ListView.ItemTemplate>
+					<DataTemplate>
+						<TextCell Text="{ Binding Name }"/>
+					</DataTemplate>
+				</ListView.ItemTemplate>
+			</ListView>
+
+		  <Label Text="Service characteristics"
+				   HorizontalOptions="Center"
+				   VerticalOptions="StartAndExpand"/>
+
+      <ListView ItemsSource="{ Binding Characteristics }"
+                SelectedItem="{ Binding SelectedCharacteristic }">
+        <ListView.ItemTemplate>
 					<DataTemplate>
 						<TextCell Text="{ Binding Name }"/>
 					</DataTemplate>

@@ -1,10 +1,11 @@
 ﻿using System.ComponentModel;
 using SecureBLE.Enums.Communication;
 using SecureBLE.Enums.StateMachine;
+using SecureBLE.Services.Interfaces;
 
 namespace SecureBLE.Services
 {
-    public class StateMachineService
+    public class StateMachineService : IStateMachineService
     {
 		public State OnReceive(State currentState, Event receivedEvent)
 		{

@@ -1,18 +1,12 @@
 ﻿using System.Collections.ObjectModel;
-using System.Threading.Tasks;
-using System.Windows.Input;
+using System.Text;
 using Plugin.BLE;
 using Plugin.BLE.Abstractions.Contracts;
-using Prism.Commands;
-using Prism.Services;
 
 namespace SecureBLE.ViewModels
 {
     public class DevicesViewModel : BaseViewModel
     {
-		private readonly IPageDialogService _pageDialogService;
-		public ICommand SelectDeviceCommand { get; set; }
-
 		private ObservableCollection<IDevice> _discoveredDevices;
 		public ObservableCollection<IDevice> DiscoveredDevices
 		{
@@ -32,6 +26,8 @@ namespace SecureBLE.ViewModels
 			{
 				_selectedDevice = value;
 				RaisePropertyChanged();
+			    ShowServices();
+
 			}
 		}
 
@@ -46,11 +42,47 @@ namespace SecureBLE.ViewModels
 			}
 		}
 
-		public DevicesViewModel(IPageDialogService pageDialogService)
-		{
-			_pageDialogService = pageDialogService;
-			SelectDeviceCommand = new DelegateCommand(async () => await SelectDevice());
+        private IService _selectedService;
 
+        public IService SelectedService
+        {
+            get { return _selectedService; }
+            set
+            {
+                _selectedService = value;
+                RaisePropertyChanged();
+                ShowCharacteristics();
+            }
+        }
+
+        private ObservableCollection<ICharacteristic> _characteristics;
+
+        public ObservableCollection<ICharacteristic> Characteristics
+        {
+            get { return _characteristics; }
+            set
+            {
+                _characteristics = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private ICharacteristic _selectedCharacteristic;
+
+        public ICharacteristic SelectedCharacteristic
+        {
+            get { return _selectedCharacteristic; }
+            set
+            {
+                _selectedCharacteristic = value;
+                RaisePropertyChanged();
+                Write();
+            }
+        }
+
+
+        public DevicesViewModel()
+		{
 			DiscoveredDevices = new ObservableCollection<IDevice>();
 			SelectedDevice = null;
 			Services = new ObservableCollection<IService>();
@@ -69,9 +101,33 @@ namespace SecureBLE.ViewModels
 			await bleAdapter.StartScanningForDevicesAsync();
 		}
 
-		private async Task SelectDevice()
+		private async void ShowServices()
 		{
+            if(SelectedDevice == null) return;
+
 			Services = new ObservableCollection<IService>(await SelectedDevice.GetServicesAsync());
 		}
+
+        private async void ShowCharacteristics()
+        {
+            if (SelectedService == null) return;
+
+            Characteristics = new ObservableCollection<ICharacteristic>(await SelectedService.GetCharacteristicsAsync());
+        }
+
+        private void Write()
+        {
+            //TODO: use communication service
+
+            if(SelectedCharacteristic == null) return;
+
+            var message = "$CONNECT;";
+            byte[] bytes = Encoding.ASCII.GetBytes(message);
+
+            if (SelectedCharacteristic.CanWrite)
+            {
+                SelectedCharacteristic.WriteAsync(bytes);
+            }
+        }
     }
 }

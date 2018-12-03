@@ -1,9 +1,10 @@
 ﻿using System;
 using SecureBLE.Enums.Communication;
+using SecureBLE.Services.Interfaces;
 
 namespace SecureBLE.Services
 {
-    public class CommunicationService
+    public class CommunicationService : ICommunicationService
     {
 		public void Connect()
 		{

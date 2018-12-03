@@ -31,19 +31,27 @@ namespace SecureBLE.ViewModels
                 return;
             }
 
-            if (!ble.IsOn)
-            {
-                await _pageDialogService.DisplayAlertAsync("Alert", "Please turn on Bluetooth!", "OK");
+		    if (!ble.IsOn)
+		    {
+		        await _pageDialogService.DisplayAlertAsync("Alert", "Please turn on Bluetooth!", "OK");
+		    }
 
-                ble.StateChanged += (s, e) =>
-                {
-                    notificationService.Snackbar("Bluetooth is enabled.");
-                };
-            }
+            ble.StateChanged += (s, e) =>
+		    {
+		        if (ble.IsOn)
+		        {
+		            notificationService.Snackbar("Bluetooth is enabled.");
+                    GoToDevicesView();
+                }
 
-			var bootstrapper = new Startup.Bootstrapper();
-			var container = bootstrapper.Bootstrap();
-			await Application.Current.MainPage.Navigation.PushAsync(container.Resolve<Views.DevicesView>());
+		    };
+        }
+
+        private async void GoToDevicesView()
+        {
+            var bootstrapper = new Startup.Bootstrapper();
+            var container = bootstrapper.Bootstrap();
+            await Application.Current.MainPage.Navigation.PushAsync(container.Resolve<Views.DevicesView>());
         }
 	}
 }
