@@ -9,13 +9,12 @@
 				   HorizontalOptions="Center"
                    VerticalOptions="StartAndExpand"/>
 
-      <ListView ItemsSource="{ Binding DiscoveredDevices }"
-					      SelectedItem="{ Binding SelectedDevice }">
-        <ListView.ItemTemplate>
+			<ListView ItemsSource="{ Binding DiscoveredDevices }"
+					  SelectedItem="{ Binding SelectedDevice }">
+				<ListView.ItemTemplate>
 					<DataTemplate>
-            <TextCell Text="{ Binding Name }"
-								  Detail="{ Binding State }">
-            </TextCell>
+						<TextCell Text="{ Binding Name }"
+								  Detail="{ Binding State }"/>
 					</DataTemplate>
 				</ListView.ItemTemplate>
 			</ListView>
@@ -33,13 +32,13 @@
 				</ListView.ItemTemplate>
 			</ListView>
 
-		  <Label Text="Service characteristics"
+			<Label Text="Service characteristics"
 				   HorizontalOptions="Center"
 				   VerticalOptions="StartAndExpand"/>
 
-      <ListView ItemsSource="{ Binding Characteristics }"
-                SelectedItem="{ Binding SelectedCharacteristic }">
-        <ListView.ItemTemplate>
+			<ListView ItemsSource="{ Binding Characteristics }"
+					  SelectedItem="{ Binding SelectedCharacteristic }">
+				<ListView.ItemTemplate>
 					<DataTemplate>
 						<TextCell Text="{ Binding Name }"/>
 					</DataTemplate>

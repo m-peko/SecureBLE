@@ -2,6 +2,7 @@
 using System.Text;
 using Plugin.BLE;
 using Plugin.BLE.Abstractions.Contracts;
+using Plugin.BLE.Abstractions.Exceptions;
 
 namespace SecureBLE.ViewModels
 {
@@ -26,8 +27,7 @@ namespace SecureBLE.ViewModels
 			{
 				_selectedDevice = value;
 				RaisePropertyChanged();
-			    ShowServices();
-
+				ConnectToSelectedDevice();
 			}
 		}
 
@@ -43,7 +43,6 @@ namespace SecureBLE.ViewModels
 		}
 
         private IService _selectedService;
-
         public IService SelectedService
         {
             get { return _selectedService; }
@@ -56,7 +55,6 @@ namespace SecureBLE.ViewModels
         }
 
         private ObservableCollection<ICharacteristic> _characteristics;
-
         public ObservableCollection<ICharacteristic> Characteristics
         {
             get { return _characteristics; }
@@ -68,7 +66,6 @@ namespace SecureBLE.ViewModels
         }
 
         private ICharacteristic _selectedCharacteristic;
-
         public ICharacteristic SelectedCharacteristic
         {
             get { return _selectedCharacteristic; }
@@ -80,12 +77,14 @@ namespace SecureBLE.ViewModels
             }
         }
 
-
         public DevicesViewModel()
 		{
 			DiscoveredDevices = new ObservableCollection<IDevice>();
 			SelectedDevice = null;
 			Services = new ObservableCollection<IService>();
+			SelectedService = null;
+			Characteristics = new ObservableCollection<ICharacteristic>();
+			SelectedCharacteristic = null;
 
 			ScanDevices();
 		}
@@ -101,25 +100,45 @@ namespace SecureBLE.ViewModels
 			await bleAdapter.StartScanningForDevicesAsync();
 		}
 
+		private async void ConnectToSelectedDevice()
+		{
+			if (SelectedDevice != null)
+			{
+				try
+				{
+					var bleAdapter = CrossBluetoothLE.Current.Adapter;
+					await bleAdapter.ConnectToDeviceAsync(SelectedDevice);
+
+					ShowServices();
+				}
+				catch (DeviceConnectionException e)
+				{
+					System.Diagnostics.Debug.WriteLine($"Could not connect to { e.DeviceName }.");
+				}
+			}
+		}
+
 		private async void ShowServices()
 		{
-            if(SelectedDevice == null) return;
-
-			Services = new ObservableCollection<IService>(await SelectedDevice.GetServicesAsync());
+			if (SelectedDevice != null)
+			{
+				Services = new ObservableCollection<IService>(await SelectedDevice.GetServicesAsync());
+			}
 		}
 
         private async void ShowCharacteristics()
         {
-            if (SelectedService == null) return;
-
-            Characteristics = new ObservableCollection<ICharacteristic>(await SelectedService.GetCharacteristicsAsync());
+            if (SelectedService != null)
+			{
+				Characteristics = new ObservableCollection<ICharacteristic>(await SelectedService.GetCharacteristicsAsync());
+			}
         }
 
         private void Write()
         {
             //TODO: use communication service
 
-            if(SelectedCharacteristic == null) return;
+            if (SelectedCharacteristic == null) return;
 
             var message = "$CONNECT;";
             byte[] bytes = Encoding.ASCII.GetBytes(message);
