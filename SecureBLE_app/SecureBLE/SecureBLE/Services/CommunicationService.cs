@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Text;
+using System.Threading.Tasks;
+using Plugin.BLE.Abstractions.Contracts;
 using SecureBLE.Enums.Communication;
 using SecureBLE.Services.Interfaces;
 
@@ -6,15 +9,13 @@ namespace SecureBLE.Services
 {
     public class CommunicationService : ICommunicationService
     {
-		public void Connect()
-		{
-			var message = ParseMessage(MessageType.CONNECT);
+        public async Task WriteMessageToArduino(ICharacteristic characteristic, MessageType type, string content = "")
+        {
+            var message = ParseMessage(type, content);
+            var byteArray = Encoding.ASCII.GetBytes(message);
+            await characteristic.WriteAsync(byteArray);
 
-			/* TODO: Initialization of communication
-             * send message to Arduino
-             * set state to keys generation
-             */
-		}
+        }
 
 		public void ReadMessage(string message)
 		{
@@ -67,8 +68,8 @@ namespace SecureBLE.Services
 			if (position == -1) position = message.IndexOf(";", StringComparison.Ordinal);
 			var type = message.Substring(1, position - 1);
 
-			if (Enum.TryParse(type, out MessageType MessageTypeEnum))
-				return MessageTypeEnum;
+			if (Enum.TryParse(type, out MessageType messageTypeEnum))
+				return messageTypeEnum;
 			return MessageType.RESET;
 		}
 

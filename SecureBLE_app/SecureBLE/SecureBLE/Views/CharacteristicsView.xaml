@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="SecureBLE.Views.DevicesView"
-             Title ="Devices List">
+             x:Class="SecureBLE.Views.CharacteristicsView"
+             Title="Characteristics List">
   <ContentPage.Content>
-    <ListView ItemsSource="{ Binding DiscoveredDevices }"
-                SelectedItem="{ Binding SelectedDevice }">
+    <ListView ItemsSource="{ Binding Characteristics }"
+              SelectedItem="{ Binding SelectedCharacteristic }">
       <ListView.Header>
-        <Label Text="Available Devices"  Style="{StaticResource ListViewHeaderLabelStyle}"/>
+        <Label Text="Available Characteristics"  Style="{StaticResource ListViewHeaderLabelStyle}"/>
       </ListView.Header>
       <ListView.ItemTemplate>
         <DataTemplate>

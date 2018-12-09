@@ -11,8 +11,7 @@ namespace SecureBLE.Droid.Services
     {
         public void Snackbar(string message, int duration, string actionText = null, Action<object> action = null)
         {
-            // TODO: replace Context with local context
-            var contentView = (Forms.Context as Activity)?.FindViewById(Android.Resource.Id.Content);
+            var contentView = (Android.App.Application.Context as Activity)?.FindViewById(Android.Resource.Id.Content);
             var snackbar = Android.Support.Design.Widget.Snackbar.Make(contentView, message, duration);
 
 			if (actionText != null)

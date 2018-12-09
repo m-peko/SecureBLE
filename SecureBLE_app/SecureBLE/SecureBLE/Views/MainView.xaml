@@ -1,13 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="SecureBLE.Views.MainView">
-    <ContentPage.Content>
-        <StackLayout>
-			<Button Text="Scan devices"
+             x:Class="SecureBLE.Views.MainView"
+             Title="Home">
+
+  <ContentPage.Content>
+    <StackLayout>
+      <Button Text="Scan devices"
 					HorizontalOptions="Center"
 					VerticalOptions="CenterAndExpand"
 					Command="{ Binding ScanDevicesCommand }"/>
-		</StackLayout>
-    </ContentPage.Content>
+    </StackLayout>
+  </ContentPage.Content>
 </ContentPage>

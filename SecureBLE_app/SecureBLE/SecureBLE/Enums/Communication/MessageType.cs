@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SecureBLE.Enums.Communication
+﻿namespace SecureBLE.Enums.Communication
 {
 	public enum MessageType
 	{

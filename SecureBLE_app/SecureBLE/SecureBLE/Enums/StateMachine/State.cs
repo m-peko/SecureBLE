@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SecureBLE.Enums.StateMachine
+﻿namespace SecureBLE.Enums.StateMachine
 {
     public enum State
     {

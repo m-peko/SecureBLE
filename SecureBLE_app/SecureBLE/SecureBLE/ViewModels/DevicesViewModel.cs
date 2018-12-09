@@ -1,8 +1,9 @@
 ﻿using System.Collections.ObjectModel;
-using System.Text;
+using Autofac;
 using Plugin.BLE;
 using Plugin.BLE.Abstractions.Contracts;
 using Plugin.BLE.Abstractions.Exceptions;
+using Xamarin.Forms;
 
 namespace SecureBLE.ViewModels
 {
@@ -31,60 +32,11 @@ namespace SecureBLE.ViewModels
 			}
 		}
 
-		private ObservableCollection<IService> _services;
-		public ObservableCollection<IService> Services
-		{
-			get { return _services; }
-			set
-			{
-				_services = value;
-				RaisePropertyChanged();
-			}
-		}
-
-        private IService _selectedService;
-        public IService SelectedService
-        {
-            get { return _selectedService; }
-            set
-            {
-                _selectedService = value;
-                RaisePropertyChanged();
-                ShowCharacteristics();
-            }
-        }
-
-        private ObservableCollection<ICharacteristic> _characteristics;
-        public ObservableCollection<ICharacteristic> Characteristics
-        {
-            get { return _characteristics; }
-            set
-            {
-                _characteristics = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        private ICharacteristic _selectedCharacteristic;
-        public ICharacteristic SelectedCharacteristic
-        {
-            get { return _selectedCharacteristic; }
-            set
-            {
-                _selectedCharacteristic = value;
-                RaisePropertyChanged();
-                Write();
-            }
-        }
 
         public DevicesViewModel()
 		{
 			DiscoveredDevices = new ObservableCollection<IDevice>();
 			SelectedDevice = null;
-			Services = new ObservableCollection<IService>();
-			SelectedService = null;
-			Characteristics = new ObservableCollection<ICharacteristic>();
-			SelectedCharacteristic = null;
 
 			ScanDevices();
 		}
@@ -108,9 +60,8 @@ namespace SecureBLE.ViewModels
 				{
 					var bleAdapter = CrossBluetoothLE.Current.Adapter;
 					await bleAdapter.ConnectToDeviceAsync(SelectedDevice);
-
-					ShowServices();
-				}
+                    GoToNextView();
+                }
 				catch (DeviceConnectionException e)
 				{
 					System.Diagnostics.Debug.WriteLine($"Could not connect to { e.DeviceName }.");
@@ -118,35 +69,11 @@ namespace SecureBLE.ViewModels
 			}
 		}
 
-		private async void ShowServices()
-		{
-			if (SelectedDevice != null)
-			{
-				Services = new ObservableCollection<IService>(await SelectedDevice.GetServicesAsync());
-			}
-		}
-
-        private async void ShowCharacteristics()
+        private async void GoToNextView()
         {
-            if (SelectedService != null)
-			{
-				Characteristics = new ObservableCollection<ICharacteristic>(await SelectedService.GetCharacteristicsAsync());
-			}
-        }
-
-        private void Write()
-        {
-            //TODO: use communication service
-
-            if (SelectedCharacteristic == null) return;
-
-            var message = "$CONNECT;";
-            byte[] bytes = Encoding.ASCII.GetBytes(message);
-
-            if (SelectedCharacteristic.CanWrite)
-            {
-                SelectedCharacteristic.WriteAsync(bytes);
-            }
+            var bootstrapper = new Startup.Bootstrapper();
+            var container = bootstrapper.Bootstrap();
+            await Application.Current.MainPage.Navigation.PushAsync(container.Resolve<Views.ServicesView>(new NamedParameter("selectedDevice", SelectedDevice)));
         }
     }
 }
