@@ -1,5 +1,5 @@
 # <p align="center">SecureBLE</p>
-<p align="center">Elliptic-curve Diffie-Hellman key exchange between Arduino microcontroller and Android application over BLE.</p>
+<p align="center">Implementation of ECDH key exchange protocol and STS protocol between Arduino microcontroller and Android application over BLE.</p>
 
 ### Key exchange protocol
 
