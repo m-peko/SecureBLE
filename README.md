@@ -1,10 +1,10 @@
 # <p align="center">SecureBLE</p>
-<p align="center">Implementation of ECDH key exchange protocol and STS protocol between Arduino microcontroller and Android application over BLE.</p>
+<p align="center">Secure communication between Arduino Uno microcontroller and Android application over BLE (Bluetooth Low Energy). Establishment of secure communication is done by using <em><strong>Elliptic-Curve Diffie-Hellman</strong></em> key exchange protocol in order to cover <em><strong>privacy</strong></em> aspect and <em><strong>Station to Station</strong></em> protocol in order to cover <em><strong>authentication</strong></em> aspect.</p>
 
-### Key exchange protocol
+### ECDH key exchange protocol
 
 <p align="center">
-  <img alt="Key exchange protocol" src="https://github.com/m-peko/ECDHoBLE/blob/master/docs/resources/KeyExchangeProtocol.jpg" height="300px"/>
+  <img alt="ECDH Key exchange protocol" src="./docs/resources/ECDHKeyExchangeProtocol.png" height="300px"/>
 </p>
 
 - Arduino Uno board as a user A selects its private key **PRarduino**, an integer less than the order *n*, and generates public key **PUarduino** which belongs to a point on elliptic curve
@@ -13,12 +13,24 @@
 
 Refer to this [article](http://www.ieeesmc.org/newsletters/back/2010_12/main_article3.html) about security mechanism for clustered wireless sensor networks based on elliptic curve cryptography.
 
+### STS protocol
+
+<p align="center">
+  <img alt="STS protocol" src="./docs/resources/STSProtocol.png" height="300px"/>
+</p>
+
+>...uses arithmetic in a multiplicative group with generator *G*. >Exponents *arduino* and *android* are chosen randomly by *Arduino* >and *Android* respectively and are used to form the session key *K*.
+
+>... *SIG* represents the signature by the principal *X* on the >string in the brackets while *{ M }* denotes symmetric encryption >of message M using key K. The particular signature algorithm chosen >does not matter for the protocol...
+
+*[Boyd, C.; Mathuria, A.: "Protocols for Authentication and Key Establishment", Springer, 1998.]*
+
 ### Bluetooth Low Energy (BLE)
 
 BLE or Bluetooth Low Energy is a wireless personal area network technology.
 
 <p align="center">
-  <img alt="BLE Stack" src="https://github.com/m-peko/ECDHoBLE/blob/master/docs/resources/BleStack.jpg" height="300px"/>
+  <img alt="BLE Stack" src="./docs/resources/BleStack.png" height="300px"/>
 </p>
 
 **GAP (Generic Access Profile)** is the layer of the BLE stack which determines the network topology of the BLE system. Based on this layer, there are two roles in the BLE communication: **BLE GAP Central** and **BLE GAP Peripheral**.
@@ -70,7 +82,7 @@ Refer to this [article](https://www.digikey.com/eewiki/display/Wireless/A+Basic+
 State Machines in general represent a set of complex rules and conditions. For the purpose of this project, State Machine is created in order to simplify execution of Elliptic-curve Diffie-Hellman key exchange protocol and also to simulate its states and transitions. The same State Machine is implemented on both, Arduino Uno board and Android device.
 
 <p align="center">
-  <img alt="State Machine" src="https://github.com/m-peko/ECDHoBLE/blob/master/docs/resources/StateMachine.jpg" height="300px"/>
+  <img alt="State Machine" src="./docs/resources/StateMachine.png" height="300px"/>
 </p>
 
 ### Messages
@@ -104,7 +116,7 @@ Wiring the HM-10 to the Arduino Uno board:
 
 ### Android
 
-For the purpose of this project, Android application is built by using C# and Xamarin.
+For the purpose of this project, Android application is built by using C# and Xamarin Forms.
 
 #### Android crypto libraries
 
