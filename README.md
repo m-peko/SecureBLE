@@ -19,9 +19,9 @@ Refer to this [article](http://www.ieeesmc.org/newsletters/back/2010_12/main_art
   <img alt="STS protocol" src="./docs/resources/STSProtocol.png" height="300px"/>
 </p>
 
->...uses arithmetic in a multiplicative group with generator *G*. >Exponents *arduino* and *android* are chosen randomly by *Arduino* >and *Android* respectively and are used to form the session key *K*.
+>...uses arithmetic in a multiplicative group with generator *G*. Exponents *arduino* and *android* are chosen randomly by *Arduino* and *Android* respectively and are used to form the session key *K*.
 
->... *SIG* represents the signature by the principal *X* on the >string in the brackets while *{ M }* denotes symmetric encryption >of message M using key K. The particular signature algorithm chosen >does not matter for the protocol...
+>... *SIG* represents the signature by the principal *X* on the string in the brackets while *{ M }* denotes symmetric encryption of message M using key K. The particular signature algorithm chosen does not matter for the protocol...
 
 *[Boyd, C.; Mathuria, A.: "Protocols for Authentication and Key Establishment", Springer, 1998.]*
 
