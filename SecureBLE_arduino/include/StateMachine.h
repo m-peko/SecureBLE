@@ -26,6 +26,9 @@
 #include <SoftwareSerial.h>
 #include <ECDHKeyExchange.h>
 
+namespace SecureBLE
+{
+
 enum class State
 {
     STATE_UNKNOWN,
@@ -49,7 +52,7 @@ class StateMachine
 {
 public:
     StateMachine(SoftwareSerial const& bleModule);
-    ~StateMachine();
+    ~StateMachine() noexcept;
 
     void onReceive(char const *messageType, char const *messageContent);
 
@@ -70,5 +73,7 @@ private:
     SoftwareSerial m_bleModule;
     ECDHKeyExchange m_keyExchange;
 };
+
+} /* SecureBLE */
 
 #endif /* StateMachine_H */

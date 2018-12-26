@@ -22,6 +22,9 @@
 
 #include <StateMachine.h>
 
+namespace SecureBLE
+{
+
 const char StateMachine::CONNECT_MESSAGE_TYPE[] = "CONNECT";
 const char StateMachine::PU_MESSAGE_TYPE[]      = "PU";
 const char StateMachine::SUCCESS_MESSAGE_TYPE[] = "SUCCESS";
@@ -116,8 +119,6 @@ StateMachine::switchState(State newState)
 void
 StateMachine::onEntry()
 {
-    m_bleModule.println("onEntry");
-
     switch (m_currentState)
     {
     case State::STATE_START:
@@ -141,10 +142,12 @@ StateMachine::onEntry()
         }
         break;
     case State::STATE_ENCRYPTED_CONNECTION:
-        /**/
+        /* data received */
     case State::STATE_UNKNOWN:
     default:
         /* unknown state */
         break;
     }
 }
+
+} /* SecureBLE */

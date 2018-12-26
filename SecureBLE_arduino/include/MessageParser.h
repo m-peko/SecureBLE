@@ -25,11 +25,14 @@
 
 #include <WString.h>
 
+namespace SecureBLE
+{
+
 class MessageParser
 {
 public:
-    MessageParser();
-    ~MessageParser();
+    MessageParser() noexcept;
+    ~MessageParser() noexcept;
 
     char const * getMessageType() const;
     char const * getMessageContent() const;
@@ -59,5 +62,7 @@ private:
     char m_messageType[MAX_TYPE_SIZE];
     char m_messageContent[MAX_CONTENT_SIZE];
 };
+
+} /* SecureBLE */
 
 #endif /* MessageParser_H */

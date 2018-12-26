@@ -22,6 +22,9 @@
 
 #include <MessageParser.h>
 
+namespace SecureBLE
+{
+
 MessageParser::MessageParser()
     : m_receivedMessage(""),
       m_messageStarted(false),
@@ -131,3 +134,5 @@ MessageParser::parseMessageContent()
         contentIdx++;
     }
 }
+
+} /* SecureBLE */

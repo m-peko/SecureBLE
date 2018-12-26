@@ -28,11 +28,14 @@
 
 #include <Stream.h>
 
+namespace SecureBLE
+{
+
 class ECDHKeyExchange
 {
 public:
-    ECDHKeyExchange();
-    ~ECDHKeyExchange();
+    ECDHKeyExchange() noexcept;
+    ~ECDHKeyExchange() noexcept;
 
     void setForeignPublicKey(char const *key);
 
@@ -54,5 +57,7 @@ private:
     uint8_t m_foreignPublicKey[KEY_SIZE];
     uint8_t m_sharedSecret[KEY_SIZE];
 };
+
+} /* SecureBLE */
 
 #endif /* ECDHKeyExchange_H */

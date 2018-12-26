@@ -26,19 +26,15 @@
 #include <MessageParser.h>
 
 #define DATA_RATE       9600
-#define LED_BUILTIN     13
 #define BLE_MODULE_RX   2
 #define BLE_MODULE_TX   3
 
 SoftwareSerial bleModule(BLE_MODULE_RX, BLE_MODULE_TX);
-StateMachine *stateMachine;
-MessageParser parser;
+SecureBLE::StateMachine *stateMachine;
+SecureBLE::MessageParser parser;
 
 void setup()
 {
-    /* initialize LED digital pin as output */
-    pinMode(LED_BUILTIN, OUTPUT);
-
     /**
      * begin serial port communication
      * and set the data rate
@@ -51,7 +47,7 @@ void setup()
      */
     bleModule.begin(DATA_RATE);
 
-    stateMachine = new StateMachine(bleModule);
+    stateMachine = new SecureBLE::StateMachine(bleModule);
 
     while (!Serial);
     Serial.println("Arduino Uno Board Started");
@@ -59,14 +55,6 @@ void setup()
 
 void loop()
 {
-    /* turn the LED on (HIGH is the voltage level) */
-    digitalWrite(LED_BUILTIN, HIGH);
-    delay(100);
-
-    /* turn the LED off (LOW is the voltage level) */
-    digitalWrite(LED_BUILTIN, LOW);
-    delay(100);
-
     /**
      * read data from the BLE module
      * and pass it to the parser

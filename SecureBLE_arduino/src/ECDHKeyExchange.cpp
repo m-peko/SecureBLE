@@ -23,6 +23,9 @@
 #include <ECDHKeyExchange.h>
 #include <Curve25519.h>
 
+namespace SecureBLE
+{
+
 ECDHKeyExchange::ECDHKeyExchange()
     : m_publicKey(),
       m_privateKey(),
@@ -88,6 +91,7 @@ ECDHKeyExchange::generateSharedSecret()
     {
         return false;
     }
+
     return true;
 }
 
@@ -105,3 +109,5 @@ ECDHKeyExchange::keyToStr(uint8_t const *key)
 
     return keyStr;
 }
+
+} /* SecureBLE */
