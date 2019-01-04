@@ -35,6 +35,7 @@ enum class State
     STATE_START,
     STATE_KEYS_GENERATION,
     STATE_SHARED_SECRET_GENERATION,
+    STATE_SIGNATURE_VERIFICATION,
     STATE_ENCRYPTED_CONNECTION
 };
 
@@ -43,8 +44,10 @@ enum class Event
     EVENT_UNKNOWN,
     EVENT_CONNECT_REQ,
     EVENT_PU_KEY_RECEIVED,
-    EVENT_SHARED_SECRET_SUCCESS,
     EVENT_SHARED_SECRET_FAILURE,
+    EVENT_ENCRYPTED_SIGNATURE_RECEIVED,
+    EVENT_SIGNATURE_VERIFIED,
+    EVENT_SIGNATURE_NOT_VERIFIED,
     EVENT_RESET
 };
 
@@ -65,8 +68,8 @@ private:
     /* message types */
     static const char CONNECT_MESSAGE_TYPE[];
     static const char PU_MESSAGE_TYPE[];
-    static const char SUCCESS_MESSAGE_TYPE[];
     static const char FAILURE_MESSAGE_TYPE[];
+    static const char SIG_MESSAGE_TYPE[];
     static const char RESET_MESSAGE_TYPE[];
 
     State m_currentState;

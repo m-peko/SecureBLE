@@ -92,8 +92,8 @@ All messages exchanged during both, key exchange protocol and encrypted communic
 Supported message types:
 - **CONNECT** - initiates ECDH key exchange protocol
 - **PU** - carries ECDH public key from one entity to another
-- **SUCCESS** - indication for successful generation of a shared secret
 - **FAILURE** - indication for unsuccessful generation of a shared secret
+- **SIG** - carries encrypted signature
 - **DATA** - carries data from one entity to another
 - **RESET** - resets ECDH key exchange protocol
 

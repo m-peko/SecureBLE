@@ -27,8 +27,8 @@ namespace SecureBLE
 
 const char StateMachine::CONNECT_MESSAGE_TYPE[] = "CONNECT";
 const char StateMachine::PU_MESSAGE_TYPE[]      = "PU";
-const char StateMachine::SUCCESS_MESSAGE_TYPE[] = "SUCCESS";
 const char StateMachine::FAILURE_MESSAGE_TYPE[] = "FAILURE";
+const char StateMachine::SIG_MESSAGE_TYPE[]     = "SIG";
 const char StateMachine::RESET_MESSAGE_TYPE[]   = "RESET";
 
 StateMachine::StateMachine(SoftwareSerial const& bleModule)
@@ -59,14 +59,27 @@ StateMachine::onReceive(char const *messageType, char const *messageContent)
             switchState(State::STATE_SHARED_SECRET_GENERATION);
         }
         break;
-    case Event::EVENT_SHARED_SECRET_SUCCESS:
+    case Event::EVENT_SHARED_SECRET_FAILURE:
         if (State::STATE_SHARED_SECRET_GENERATION == m_currentState)
+        {
+            switchState(State::STATE_START);
+        }
+        break;
+    case Event::EVENT_ENCRYPTED_SIGNATURE_RECEIVED:
+        if (State::STATE_SHARED_SECRET_GENERATION == m_currentState)
+        {
+            // verify signature
+            switchState(State::STATE_SIGNATURE_VERIFICATION);
+        }
+        break;
+    case Event::EVENT_SIGNATURE_VERIFIED:
+        if (State::STATE_SIGNATURE_VERIFICATION == m_currentState)
         {
             switchState(State::STATE_ENCRYPTED_CONNECTION);
         }
         break;
-    case Event::EVENT_SHARED_SECRET_FAILURE:
-        if (State::STATE_SHARED_SECRET_GENERATION == m_currentState)
+    case Event::EVENT_SIGNATURE_NOT_VERIFIED:
+        if (State::STATE_SIGNATURE_VERIFICATION == m_currentState)
         {
             switchState(State::STATE_START);
         }
@@ -91,13 +104,13 @@ StateMachine::messageTypeToEvent(char const *messageType)
     {
         return Event::EVENT_PU_KEY_RECEIVED;
     }
-    else if (!strcmp(messageType, SUCCESS_MESSAGE_TYPE))
-    {
-        return Event::EVENT_SHARED_SECRET_SUCCESS;
-    }
     else if (!strcmp(messageType, FAILURE_MESSAGE_TYPE))
     {
         return Event::EVENT_SHARED_SECRET_FAILURE;
+    }
+    else if (!strcmp(messageType, SIG_MESSAGE_TYPE))
+    {
+        return Event::EVENT_ENCRYPTED_SIGNATURE_RECEIVED;
     }
     else if (!strcmp(messageType, RESET_MESSAGE_TYPE))
     {
