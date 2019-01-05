@@ -25,11 +25,11 @@
 namespace SecureBLE
 {
 
-const char StateMachine::CONNECT_MESSAGE_TYPE[] = "CONNECT";
-const char StateMachine::PU_MESSAGE_TYPE[]      = "PU";
-const char StateMachine::FAILURE_MESSAGE_TYPE[] = "FAILURE";
-const char StateMachine::SIG_MESSAGE_TYPE[]     = "SIG";
-const char StateMachine::RESET_MESSAGE_TYPE[]   = "RESET";
+char const StateMachine::CONNECT_MESSAGE_TYPE[] = "CONNECT";
+char const StateMachine::PU_MESSAGE_TYPE[]      = "PU";
+char const StateMachine::FAILURE_MESSAGE_TYPE[] = "FAILURE";
+char const StateMachine::SIG_MESSAGE_TYPE[]     = "SIG";
+char const StateMachine::RESET_MESSAGE_TYPE[]   = "RESET";
 
 StateMachine::StateMachine(SoftwareSerial const& bleModule)
     : m_currentState(State::STATE_START),

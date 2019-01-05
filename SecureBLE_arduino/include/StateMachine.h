@@ -66,11 +66,11 @@ private:
     void onEntry();
 
     /* message types */
-    static const char CONNECT_MESSAGE_TYPE[];
-    static const char PU_MESSAGE_TYPE[];
-    static const char FAILURE_MESSAGE_TYPE[];
-    static const char SIG_MESSAGE_TYPE[];
-    static const char RESET_MESSAGE_TYPE[];
+    static char const CONNECT_MESSAGE_TYPE[];
+    static char const PU_MESSAGE_TYPE[];
+    static char const FAILURE_MESSAGE_TYPE[];
+    static char const SIG_MESSAGE_TYPE[];
+    static char const RESET_MESSAGE_TYPE[];
 
     State m_currentState;
     SoftwareSerial m_bleModule;
