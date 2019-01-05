@@ -74,7 +74,7 @@ private:
 
     State m_currentState;
     SoftwareSerial m_bleModule;
-    ECDHKeyExchange m_keyExchange;
+    ECDHKeyExchange m_ECDHKeyExchange;
 };
 
 } /* SecureBLE */
