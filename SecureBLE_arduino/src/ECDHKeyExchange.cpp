@@ -21,6 +21,7 @@
  */
 
 #include <ECDHKeyExchange.h>
+#include <utils/Utils.h>
 #include <Curve25519.h>
 
 namespace SecureBLE
@@ -39,11 +40,7 @@ ECDHKeyExchange::~ECDHKeyExchange()
 void
 ECDHKeyExchange::setForeignPublicKey(char const *key)
 {
-    for (size_t i = 0; i < KEY_SIZE; i++)
-    {
-        sscanf(key, "%2hhx", &m_foreignPublicKey[i]);
-        key += 2;
-    }
+    Utils::charArrayToByteArray(key, m_foreignPublicKey, KEY_SIZE);
 }
 
 char const *
@@ -98,15 +95,8 @@ ECDHKeyExchange::generateSharedSecret()
 char const *
 ECDHKeyExchange::keyToStr(uint8_t const *key)
 {
-    uint8_t offset = 0;
     static char keyStr[2 * KEY_SIZE + 1];
-
-    for (size_t i = 0; i < KEY_SIZE; i++)
-    {
-        offset += sprintf(keyStr + offset, "%02X", key[i]);
-    }
-    sprintf(keyStr + offset, "%c", '\0');
-
+    Utils::byteArrayToCharArray(key, keyStr, KEY_SIZE);
     return keyStr;
 }
 
