@@ -4,7 +4,7 @@
 ### ECDH key exchange protocol
 
 <p align="center">
-  <img alt="ECDH Key exchange protocol" src="./docs/resources/ECDHKeyExchangeProtocol.png" height="300px"/>
+  <img alt="ECDH Key exchange protocol" src="./docs/images/ECDHKeyExchangeProtocol.png" height="300px"/>
 </p>
 
 - Arduino Uno board as a user A selects its private key **PRarduino**, an integer less than the order *n*, and generates public key **PUarduino** which belongs to a point on elliptic curve
@@ -16,7 +16,7 @@ Refer to this [article](http://www.ieeesmc.org/newsletters/back/2010_12/main_art
 ### STS protocol
 
 <p align="center">
-  <img alt="STS protocol" src="./docs/resources/STSProtocol.png" height="300px"/>
+  <img alt="STS protocol" src="./docs/images/STSProtocol.png" height="300px"/>
 </p>
 
 >...uses arithmetic in a multiplicative group with generator *G*. Exponents *arduino* and *android* are chosen randomly by *Arduino* and *Android* respectively and are used to form the session key *K*.
@@ -30,7 +30,7 @@ Refer to this [article](http://www.ieeesmc.org/newsletters/back/2010_12/main_art
 BLE or Bluetooth Low Energy is a wireless personal area network technology.
 
 <p align="center">
-  <img alt="BLE Stack" src="./docs/resources/BleStack.png" height="300px"/>
+  <img alt="BLE Stack" src="./docs/images/BleStack.png" height="300px"/>
 </p>
 
 **GAP (Generic Access Profile)** is the layer of the BLE stack which determines the network topology of the BLE system. Based on this layer, there are two roles in the BLE communication: **BLE GAP Central** and **BLE GAP Peripheral**.
@@ -82,7 +82,7 @@ Refer to this [article](https://www.digikey.com/eewiki/display/Wireless/A+Basic+
 State Machines in general represent a set of complex rules and conditions. For the purpose of this project, State Machine is created in order to simplify execution of Elliptic-curve Diffie-Hellman key exchange protocol and also to simulate its states and transitions. The same State Machine is implemented on both, Arduino Uno board and Android device.
 
 <p align="center">
-  <img alt="State Machine" src="./docs/resources/StateMachine.png" height="300px"/>
+  <img alt="State Machine" src="./docs/images/StateMachine.png" height="300px"/>
 </p>
 
 ### Messages
