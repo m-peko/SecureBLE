@@ -68,6 +68,7 @@ StateMachine::onReceive(char const *messageType, char const *messageContent)
     case Event::EVENT_ENCRYPTED_SIGNATURE_RECEIVED:
         if (State::STATE_SHARED_SECRET_GENERATION == m_currentState)
         {
+            m_sts.setForeignSignature(messageContent);
             switchState(State::STATE_SIGNATURE_VERIFICATION);
         }
         break;
@@ -88,6 +89,53 @@ StateMachine::onReceive(char const *messageType, char const *messageContent)
         break;
     default:
         /* unknown event */
+        break;
+    }
+}
+
+void
+StateMachine::switchState(State newState)
+{
+    m_currentState = newState;
+    onEntry();
+}
+
+void
+StateMachine::onEntry()
+{
+    switch (m_currentState)
+    {
+    case State::STATE_START:
+        m_ECDHKeyExchange.clearKeys();
+        break;
+    case State::STATE_KEYS_GENERATION:
+        m_ECDHKeyExchange.generateKeys();
+
+        /* publish ECDH public key  */
+        m_bleModule.print("$PU=");
+        m_bleModule.print(m_ECDHKeyExchange.getPublicKeyStr());
+        m_bleModule.println(";");
+
+        break;
+    case State::STATE_SHARED_SECRET_GENERATION:
+        if (m_ECDHKeyExchange.generateSharedSecret())
+        {
+            /* make signature and send it */
+        }
+        else
+        {
+            m_bleModule.println("$FAILURE;");
+        }
+        break;
+    case State::STATE_SIGNATURE_VERIFICATION:
+        /* verify signature */
+        break;
+    case State::STATE_ENCRYPTED_CONNECTION:
+        /* data received */
+        break;
+    case State::STATE_UNKNOWN:
+    default:
+        /* unknown state */
         break;
     }
 }
@@ -118,51 +166,6 @@ StateMachine::messageTypeToEvent(char const *messageType)
     else
     {
         return Event::EVENT_UNKNOWN;
-    }
-}
-
-void
-StateMachine::switchState(State newState)
-{
-    m_currentState = newState;
-    onEntry();
-}
-
-void
-StateMachine::onEntry()
-{
-    switch (m_currentState)
-    {
-    case State::STATE_START:
-        m_ECDHKeyExchange.clearKeys();
-        break;
-    case State::STATE_KEYS_GENERATION:
-        m_ECDHKeyExchange.generateKeys();
-
-        m_bleModule.print("$PU=");
-        m_bleModule.print(m_ECDHKeyExchange.getPublicKeyStr());
-        m_bleModule.println(";");
-        break;
-    case State::STATE_SHARED_SECRET_GENERATION:
-        if (m_ECDHKeyExchange.generateSharedSecret())
-        {
-            /* make signature and send it */
-        }
-        else
-        {
-            m_bleModule.println("$FAILURE;");
-        }
-        break;
-    case State::STATE_SIGNATURE_VERIFICATION:
-        /* verify signature */
-        break;
-    case State::STATE_ENCRYPTED_CONNECTION:
-        /* data received */
-        break;
-    case State::STATE_UNKNOWN:
-    default:
-        /* unknown state */
-        break;
     }
 }
 

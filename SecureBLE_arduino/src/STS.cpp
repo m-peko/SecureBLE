@@ -21,16 +21,47 @@
  */
 
 #include <STS.h>
-#include <Curve25519.h>
+#include <utils/Utils.h>
 
 namespace SecureBLE
 {
 
 STS::STS()
-    : m_sessionKey()
+    : m_foreignSignature(),
+      m_sessionKey()
 {}
 
 STS::~STS()
 {}
+
+void
+STS::setForeignSignature(char const *signature)
+{
+    Utils::charArrayToByteArray(signature, m_foreignSignature, SIGNATURE_SIZE);
+}
+
+uint8_t const *
+STS::createSignature(uint8_t const *keyA, uint8_t const *keyB)
+{
+
+}
+
+bool
+STS::verifySignature(uint8_t const* payload)
+{
+
+}
+
+uint8_t const *
+STS::encrypt(uint8_t const *payload)
+{
+
+}
+
+uint8_t const *
+STS::decrypt(uint8_t const *payload)
+{
+
+}
 
 } /* SecureBLE */

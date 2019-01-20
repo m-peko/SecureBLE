@@ -25,6 +25,7 @@
 
 #include <SoftwareSerial.h>
 #include <ECDHKeyExchange.h>
+#include <STS.h>
 
 namespace SecureBLE
 {
@@ -60,10 +61,10 @@ public:
     void onReceive(char const *messageType, char const *messageContent);
 
 private:
-    Event messageTypeToEvent(char const *messageType);
-
     void switchState(State newState);
     void onEntry();
+
+    Event messageTypeToEvent(char const *messageType);
 
     /* message types */
     static char const CONNECT_MESSAGE_TYPE[];
@@ -75,6 +76,7 @@ private:
     State m_currentState;
     SoftwareSerial m_bleModule;
     ECDHKeyExchange m_ECDHKeyExchange;
+    STS m_sts;
 };
 
 } /* SecureBLE */

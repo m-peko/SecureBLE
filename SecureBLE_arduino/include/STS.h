@@ -35,6 +35,8 @@ public:
     STS() noexcept;
     ~STS() noexcept;
 
+    void setForeignSignature(char const *signature);
+
     uint8_t const * createSignature(uint8_t const *keyA, uint8_t const *keyB);
     bool verifySignature(uint8_t const* payload);
 
@@ -42,8 +44,10 @@ public:
     uint8_t const * decrypt(uint8_t const *payload);
 
 private:
-    static constexpr size_t KEY_SIZE = 32;
+    static constexpr size_t SIGNATURE_SIZE = 64;
+    static constexpr size_t KEY_SIZE       = 32;
 
+    uint8_t m_foreignSignature[SIGNATURE_SIZE];
     uint8_t m_sessionKey[KEY_SIZE];
 };
 
