@@ -20,48 +20,36 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#include <STS.h>
 #include <utils/Utils.h>
 
 namespace SecureBLE
 {
 
-STS::STS()
-    : m_foreignSignature(),
-      m_sessionKey()
-{}
-
-STS::~STS()
-{}
+namespace Utils
+{
 
 void
-STS::setForeignSignature(char const *signature)
+charArrayToByteArray(char const *src, uint8_t *dst, size_t const size)
 {
-    Utils::charArrayToByteArray(signature, m_foreignSignature, SIGNATURE_SIZE);
+    for (size_t i = 0; i < size; i++)
+    {
+        sscanf(src, "%2hhx", dst + i);
+        src += 2;
+    }
 }
 
-uint8_t const *
-STS::createSignature(uint8_t const *keyA, uint8_t const *keyB)
+void
+byteArrayToCharArray(uint8_t const *src, char *dst, size_t const size)
 {
-    return nullptr; // TODO(m-peko)
+    uint8_t offset = 0;
+
+    for (size_t i = 0; i < size; i++)
+    {
+        offset += sprintf(dst + offset, "%02X", src[i]);
+    }
+    sprintf(dst + offset, "%c", '\0');
 }
 
-bool
-STS::verifySignature(uint8_t const* payload)
-{
-    return false; // TODO(m-peko)
-}
-
-uint8_t const *
-STS::encrypt(uint8_t const *payload)
-{
-    return nullptr; // TODO(m-peko)
-}
-
-uint8_t const *
-STS::decrypt(uint8_t const *payload)
-{
-    return nullptr; // TODO(m-peko)
-}
+} /* Utils */
 
 } /* SecureBLE */

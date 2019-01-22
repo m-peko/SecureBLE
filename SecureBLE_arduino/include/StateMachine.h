@@ -49,6 +49,7 @@ enum class Event
     EVENT_ENCRYPTED_SIGNATURE_RECEIVED,
     EVENT_SIGNATURE_VERIFIED,
     EVENT_SIGNATURE_NOT_VERIFIED,
+    EVENT_DATA,
     EVENT_RESET
 };
 
@@ -71,6 +72,9 @@ private:
     static char const PU_MESSAGE_TYPE[];
     static char const FAILURE_MESSAGE_TYPE[];
     static char const SIG_MESSAGE_TYPE[];
+    static char const SIGVER_MESSAGE_TYPE[];
+    static char const SIGNVER_MESSAGE_TYPE[];
+    static char const DATA_MESSAGE_TYPE[];
     static char const RESET_MESSAGE_TYPE[];
 
     State m_currentState;

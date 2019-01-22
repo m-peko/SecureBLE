@@ -29,6 +29,9 @@ char const StateMachine::CONNECT_MESSAGE_TYPE[] = "CONNECT";
 char const StateMachine::PU_MESSAGE_TYPE[]      = "PU";
 char const StateMachine::FAILURE_MESSAGE_TYPE[] = "FAILURE";
 char const StateMachine::SIG_MESSAGE_TYPE[]     = "SIG";
+char const StateMachine::SIGVER_MESSAGE_TYPE[]  = "SIGVER";
+char const StateMachine::SIGNVER_MESSAGE_TYPE[] = "SIGNVER";
+char const StateMachine::DATA_MESSAGE_TYPE[]    = "DATA";
 char const StateMachine::RESET_MESSAGE_TYPE[]   = "RESET";
 
 StateMachine::StateMachine(SoftwareSerial const& bleModule)
@@ -158,6 +161,18 @@ StateMachine::messageTypeToEvent(char const *messageType)
     else if (!strcmp(messageType, SIG_MESSAGE_TYPE))
     {
         return Event::EVENT_ENCRYPTED_SIGNATURE_RECEIVED;
+    }
+    else if (!strcmp(messageType, SIGVER_MESSAGE_TYPE))
+    {
+        return Event::EVENT_SIGNATURE_VERIFIED;
+    }
+    else if (!strcmp(messageType, SIGNVER_MESSAGE_TYPE))
+    {
+        return Event::EVENT_SIGNATURE_NOT_VERIFIED;
+    }
+    else if (!strcmp(messageType, DATA_MESSAGE_TYPE))
+    {
+        return Event::EVENT_DATA;
     }
     else if (!strcmp(messageType, RESET_MESSAGE_TYPE))
     {

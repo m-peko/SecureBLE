@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Marin Peko
+ * Copyright (C) 2015 Southern Storm Software, Pty Ltd.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -20,48 +20,27 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#include <STS.h>
-#include <utils/Utils.h>
+#ifndef CRYPTO_BLOCKCIPHER_h
+#define CRYPTO_BLOCKCIPHER_h
 
-namespace SecureBLE
+#include <inttypes.h>
+#include <stddef.h>
+
+class BlockCipher
 {
+public:
+    BlockCipher();
+    virtual ~BlockCipher();
 
-STS::STS()
-    : m_foreignSignature(),
-      m_sessionKey()
-{}
+    virtual size_t blockSize() const = 0;
+    virtual size_t keySize() const = 0;
 
-STS::~STS()
-{}
+    virtual bool setKey(const uint8_t *key, size_t len) = 0;
 
-void
-STS::setForeignSignature(char const *signature)
-{
-    Utils::charArrayToByteArray(signature, m_foreignSignature, SIGNATURE_SIZE);
-}
+    virtual void encryptBlock(uint8_t *output, const uint8_t *input) = 0;
+    virtual void decryptBlock(uint8_t *output, const uint8_t *input) = 0;
 
-uint8_t const *
-STS::createSignature(uint8_t const *keyA, uint8_t const *keyB)
-{
-    return nullptr; // TODO(m-peko)
-}
+    virtual void clear() = 0;
+};
 
-bool
-STS::verifySignature(uint8_t const* payload)
-{
-    return false; // TODO(m-peko)
-}
-
-uint8_t const *
-STS::encrypt(uint8_t const *payload)
-{
-    return nullptr; // TODO(m-peko)
-}
-
-uint8_t const *
-STS::decrypt(uint8_t const *payload)
-{
-    return nullptr; // TODO(m-peko)
-}
-
-} /* SecureBLE */
+#endif

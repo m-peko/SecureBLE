@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Marin Peko
+ * Copyright (C) 2015 Southern Storm Software, Pty Ltd.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -20,48 +20,38 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#include <STS.h>
-#include <utils/Utils.h>
+#ifndef CRYPTO_SHA256_h
+#define CRYPTO_SHA256_h
 
-namespace SecureBLE
+#include "Hash.h"
+
+class SHA256 : public Hash
 {
+public:
+    SHA256();
+    virtual ~SHA256();
 
-STS::STS()
-    : m_foreignSignature(),
-      m_sessionKey()
-{}
+    size_t hashSize() const;
+    size_t blockSize() const;
 
-STS::~STS()
-{}
+    void reset();
+    void update(const void *data, size_t len);
+    void finalize(void *hash, size_t len);
 
-void
-STS::setForeignSignature(char const *signature)
-{
-    Utils::charArrayToByteArray(signature, m_foreignSignature, SIGNATURE_SIZE);
-}
+    void clear();
 
-uint8_t const *
-STS::createSignature(uint8_t const *keyA, uint8_t const *keyB)
-{
-    return nullptr; // TODO(m-peko)
-}
+    void resetHMAC(const void *key, size_t keyLen);
+    void finalizeHMAC(const void *key, size_t keyLen, void *hash, size_t hashLen);
 
-bool
-STS::verifySignature(uint8_t const* payload)
-{
-    return false; // TODO(m-peko)
-}
+private:
+    struct {
+        uint32_t h[8];
+        uint32_t w[16];
+        uint64_t length;
+        uint8_t chunkSize;
+    } state;
 
-uint8_t const *
-STS::encrypt(uint8_t const *payload)
-{
-    return nullptr; // TODO(m-peko)
-}
+    void processChunk();
+};
 
-uint8_t const *
-STS::decrypt(uint8_t const *payload)
-{
-    return nullptr; // TODO(m-peko)
-}
-
-} /* SecureBLE */
+#endif
