@@ -127,15 +127,7 @@ StateMachine::onEntry()
     case State::STATE_SHARED_SECRET_GENERATION:
         if (m_ECDHKeyExchange.generateSharedSecret())
         {
-            /* make signature and send it */
-            m_bleModule.println("$SIG=3c0b8d2c5c3aba6");
-            m_bleModule.println("88afae92fcd751d80fca");
-            m_bleModule.println("e2f68a2224abfd32936a");
-            m_bleModule.println("e2f68a2224abfd32936a");
-            m_bleModule.println("a3186c598b3409c9bdec");
-            m_bleModule.println("19f0457a66ee44070f49");
-            m_bleModule.println("01996dd1cbcafd3c0802");
-            m_bleModule.println("c24b544dc339a;");
+            // TODO(m-peko): Create signature and send it
         }
         else
         {
@@ -154,8 +146,7 @@ StateMachine::onEntry()
         break;
     case State::STATE_ENCRYPTED_CONNECTION:
         /* data received */
-        m_bleModule.println("Data received");
-        m_bleModule.println("$DATA=b02a4a97ddd2b838bfa6fe;");
+        // TODO(m-peko): Decrypt received data with ECDH shared secret
         break;
     case State::STATE_UNKNOWN:
     default:

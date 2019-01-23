@@ -79,7 +79,10 @@ ECDHKeyExchange::generateKeys()
 bool
 ECDHKeyExchange::generateSharedSecret()
 {
-    memcpy(m_sharedSecret, m_foreignPublicKey, KEY_SIZE);
+    for (size_t i = 0; i < KEY_SIZE; i++)
+    {
+        m_sharedSecret[i] = m_foreignPublicKey[i];
+    }
 
     if (!Curve25519::dh2(m_sharedSecret, m_privateKey))
     {
