@@ -35,10 +35,11 @@ public:
     STS() noexcept;
     ~STS() noexcept;
 
+    void setSessionKey(char const *sharedSecret);
     void setForeignSignature(char const *signature);
 
     uint8_t const * createSignature(uint8_t const *keyA, uint8_t const *keyB);
-    bool verifySignature(uint8_t const* payload);
+    bool verifyForeignSignature();
 
     uint8_t const * encrypt(uint8_t const *payload);
     uint8_t const * decrypt(uint8_t const *payload);

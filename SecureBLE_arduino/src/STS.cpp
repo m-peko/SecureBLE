@@ -35,6 +35,13 @@ STS::~STS()
 {}
 
 void
+STS::setSessionKey(char const *sharedSecret)
+{
+    // TODO(m-peko): Set session key from ECDH shared secret by hashing it with SHA256
+    Utils::charArrayToByteArray(sharedSecret, m_sessionKey, KEY_SIZE);
+}
+
+void
 STS::setForeignSignature(char const *signature)
 {
     Utils::charArrayToByteArray(signature, m_foreignSignature, SIGNATURE_SIZE);
@@ -43,25 +50,29 @@ STS::setForeignSignature(char const *signature)
 uint8_t const *
 STS::createSignature(uint8_t const *keyA, uint8_t const *keyB)
 {
-    return nullptr; // TODO(m-peko)
+    // TODO(m-peko): Create signature with Ed25519
+    return nullptr;
 }
 
 bool
-STS::verifySignature(uint8_t const* payload)
+STS::verifyForeignSignature()
 {
-    return false; // TODO(m-peko)
+    // TODO(m-peko): Verify signature with Ed25519
+    return true;
 }
 
 uint8_t const *
 STS::encrypt(uint8_t const *payload)
 {
-    return nullptr; // TODO(m-peko)
+    // TODO(m-peko): AES256 encryption with session key
+    return nullptr;
 }
 
 uint8_t const *
 STS::decrypt(uint8_t const *payload)
 {
-    return nullptr; // TODO(m-peko)
+    // TODO(m-peko): AES256 decryption with session key
+    return nullptr;
 }
 
 } /* SecureBLE */

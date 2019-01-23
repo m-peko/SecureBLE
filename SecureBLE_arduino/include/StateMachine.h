@@ -30,9 +30,9 @@
 namespace SecureBLE
 {
 
-enum class State
+enum State
 {
-    STATE_UNKNOWN,
+    STATE_UNKNOWN = 0,
     STATE_START,
     STATE_KEYS_GENERATION,
     STATE_SHARED_SECRET_GENERATION,
@@ -40,9 +40,9 @@ enum class State
     STATE_ENCRYPTED_CONNECTION
 };
 
-enum class Event
+enum Event
 {
-    EVENT_UNKNOWN,
+    EVENT_UNKNOWN = 0,
     EVENT_CONNECT_REQ,
     EVENT_PU_KEY_RECEIVED,
     EVENT_SHARED_SECRET_FAILURE,

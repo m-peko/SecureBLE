@@ -87,6 +87,10 @@ StateMachine::onReceive(char const *messageType, char const *messageContent)
             switchState(State::STATE_START);
         }
         break;
+    case Event::EVENT_DATA:
+        // TODO(m-peko): Set data and decrypt it with ECDH shared secret
+        switchState(State::STATE_ENCRYPTED_CONNECTION);
+        break;
     case Event::EVENT_RESET:
         switchState(State::STATE_START);
         break;
@@ -115,8 +119,8 @@ StateMachine::onEntry()
         m_ECDHKeyExchange.generateKeys();
 
         /* publish ECDH public key  */
-        m_bleModule.print("$PU=");
-        m_bleModule.print(m_ECDHKeyExchange.getPublicKeyStr());
+        m_bleModule.println("$PU=");
+        m_bleModule.println(m_ECDHKeyExchange.getPublicKeyStr());
         m_bleModule.println(";");
 
         break;
@@ -124,6 +128,14 @@ StateMachine::onEntry()
         if (m_ECDHKeyExchange.generateSharedSecret())
         {
             /* make signature and send it */
+            m_bleModule.println("$SIG=3c0b8d2c5c3aba6");
+            m_bleModule.println("88afae92fcd751d80fca");
+            m_bleModule.println("e2f68a2224abfd32936a");
+            m_bleModule.println("e2f68a2224abfd32936a");
+            m_bleModule.println("a3186c598b3409c9bdec");
+            m_bleModule.println("19f0457a66ee44070f49");
+            m_bleModule.println("01996dd1cbcafd3c0802");
+            m_bleModule.println("c24b544dc339a;");
         }
         else
         {
@@ -131,10 +143,19 @@ StateMachine::onEntry()
         }
         break;
     case State::STATE_SIGNATURE_VERIFICATION:
-        /* verify signature */
+        if (m_sts.verifyForeignSignature())
+        {
+            m_bleModule.println("$SIGVER;");
+        }
+        else
+        {
+            m_bleModule.println("$SIGNVER;");
+        }
         break;
     case State::STATE_ENCRYPTED_CONNECTION:
         /* data received */
+        m_bleModule.println("Data received");
+        m_bleModule.println("$DATA=b02a4a97ddd2b838bfa6fe;");
         break;
     case State::STATE_UNKNOWN:
     default:
