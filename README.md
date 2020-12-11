@@ -10,6 +10,7 @@
 5. [Messages](#messages)
 6. [Arduino](#arduino)
 7. [Performances](#performances)
+8. [Support](#support)
 
 ### Bluetooth Low Energy (BLE)
 
@@ -149,3 +150,9 @@ Wiring the HM-10 to the Arduino Uno board:
 | AES256 encryption (per byte) | 24 us |
 | AES256 decryption (per byte) | 46 us |
 | SHA256 hashing | 2835 us |
+
+### Support
+
+If you like the work `SecureBLE` is doing, please consider supporting it:
+
+<a href="https://www.buymeacoffee.com/mpeko" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-red.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
